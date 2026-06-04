@@ -1,0 +1,629 @@
+graph TD
+    subgraph SUB0 ["project-graph-mapper/src/project_graph_mapper/cli.py"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__watch["watch()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__deadcode["deadcode()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__cycles["cycles()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__path["path()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__scan["scan()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__viz["viz()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__impact["impact()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__hotspots["hotspots()"]
+        project_graph_mapper_src_project_graph_mapper_cli_py__langs["langs()"]
+    end
+    subgraph SUB1 ["project-graph-mapper/src/project_graph_mapper/graph/builder.py"]
+        project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder___init__["__init__()"]
+        project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file["update_file()"]
+        project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder["GraphBuilder()"]
+        project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder__collect_files["_collect_files()"]
+        project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build["build()"]
+        project_graph_mapper_src_project_graph_mapper_graph_builder_py___init_registry["_init_registry()"]
+    end
+    subgraph SUB2 ["project-graph-mapper/src/project_graph_mapper/graph/models.py"]
+        project_graph_mapper_src_project_graph_mapper_graph_models_py__Symbol["Symbol()"]
+        project_graph_mapper_src_project_graph_mapper_graph_models_py__FileNode["FileNode()"]
+        project_graph_mapper_src_project_graph_mapper_graph_models_py__Location["Location()"]
+        project_graph_mapper_src_project_graph_mapper_graph_models_py__CallSite["CallSite()"]
+    end
+    subgraph SUB3 ["project-graph-mapper/src/project_graph_mapper/graph/query.py"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_dead_code["dead_code()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_call_paths["call_paths()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_hotspots["hotspots()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact["impact()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact_by_id["impact_by_id()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine["QueryEngine()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine___init__["__init__()"]
+        project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_cycles["cycles()"]
+    end
+    subgraph SUB4 ["project-graph-mapper/src/project_graph_mapper/output/html_writer.py"]
+        project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write["write()"]
+        project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter["HtmlWriter()"]
+        project_graph_mapper_src_project_graph_mapper_output_html_writer_py___resolve_js_ts_import["_resolve_js_ts_import()"]
+    end
+    subgraph SUB5 ["project-graph-mapper/src/project_graph_mapper/output/json_writer.py"]
+        project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter_write["write()"]
+        project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter["JsonWriter()"]
+    end
+    subgraph SUB6 ["project-graph-mapper/src/project_graph_mapper/output/md_writer.py"]
+        project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_impact["write_impact()"]
+        project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context["write_context()"]
+        project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter["MarkdownWriter()"]
+        project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_mermaid["write_mermaid()"]
+    end
+    subgraph SUB7 ["project-graph-mapper/src/project_graph_mapper/parser/ai_parser.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser__build_result["_build_result()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser["AiParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_resolve_calls["resolve_calls()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_language_name["language_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_engine_name["engine_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser___init__["__init__()"]
+        project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file["parse_file()"]
+    end
+    subgraph SUB8 ["project-graph-mapper/src/project_graph_mapper/parser/base.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__register["register()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file["parse_file()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_language_name["language_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__clear_registry["clear_registry()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__supported_extensions["supported_extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_engine_name["engine_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_resolve_calls["resolve_calls()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__registered_parsers["registered_parsers()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_base_py__get_parser["get_parser()"]
+    end
+    subgraph SUB9 ["project-graph-mapper/src/project_graph_mapper/parser/go_parser.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_symbols["_extract_symbols()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__get_callee_name["_get_callee_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_type_spec["_extract_type_spec()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls["_find_calls()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser["GoParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_imports["_extract_imports()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__get_language["_get_language()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_receiver_type["_extract_receiver_type()"]
+    end
+    subgraph SUB10 ["project-graph-mapper/src/project_graph_mapper/parser/java_parser.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__walk_declarations["_walk_declarations()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__extract_symbols["_extract_symbols()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser["JavaParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls["_find_calls()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__get_callee_name["_get_callee_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__extract_imports["_extract_imports()"]
+        project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__get_language["_get_language()"]
+    end
+    subgraph SUB11 ["project-graph-mapper/src/project_graph_mapper/parser/js_parser.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser["TypeScriptParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser["JavaScriptParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__extract_symbols["_extract_symbols()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__walk_symbols["_walk_symbols()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__get_language["_get_language()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TSXParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__extract_imports["_extract_imports()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TSXParser__get_language["_get_language()"]
+        project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser__get_language["_get_language()"]
+    end
+    subgraph SUB12 ["project-graph-mapper/src/project_graph_mapper/parser/python_parser.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file["parse_file()"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_engine_name["engine_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser__extract_class["_extract_class()"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_extensions["extensions()"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser["PythonParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser__extract_function["_extract_function()"]
+        project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_resolve_calls["resolve_calls()"]
+    end
+    subgraph SUB13 ["project-graph-mapper/src/project_graph_mapper/parser/rust_parser.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_language["_get_language()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_impl_type_name["_get_impl_type_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser["RustParser()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__walk_top_level["_walk_top_level()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_impl["_extract_impl()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls["_find_calls()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_imports["_extract_imports()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_callee_name["_get_callee_name()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_symbols["_extract_symbols()"]
+        project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser_extensions["extensions()"]
+    end
+    subgraph SUB14 ["project-graph-mapper/src/project_graph_mapper/parser/tree_sitter_base.py"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file["parse_file()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls["resolve_calls()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__["__init__()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym["_make_sym()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text["_node_text()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_children_by_type["_find_children_by_type()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_first_line["_node_first_line()"]
+        project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls["_find_calls()"]
+    end
+    subgraph SUB15 ["project-graph-mapper/src/project_graph_mapper/server.py"]
+        project_graph_mapper_src_project_graph_mapper_server_py__notify_reload["notify_reload()"]
+        project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler_do_GET["do_GET()"]
+        project_graph_mapper_src_project_graph_mapper_server_py__start_server["start_server()"]
+        project_graph_mapper_src_project_graph_mapper_server_py__stop_server["stop_server()"]
+        project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler___init__["__init__()"]
+    end
+    subgraph SUB16 ["project-graph-mapper/src/project_graph_mapper/watcher.py"]
+        project_graph_mapper_src_project_graph_mapper_watcher_py___Handler___init__["__init__()"]
+        project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle["_handle()"]
+        project_graph_mapper_src_project_graph_mapper_watcher_py__start_watch["start_watch()"]
+    end
+    subgraph SUB17 ["project-graph-mapper/tests/test_core.py"]
+        project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_resolve_used_by["test_resolve_used_by()"]
+        project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_unknown_symbol["test_impact_unknown_symbol()"]
+        project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_docstring["test_captures_docstring()"]
+        project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_finds_direct_callers["test_impact_finds_direct_callers()"]
+        project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_function["test_extracts_function()"]
+        project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_imports["test_captures_imports()"]
+        project_graph_mapper_tests_test_core_py__TestPythonParser_test_invalid_syntax_returns_empty["test_invalid_syntax_returns_empty()"]
+        project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_build_finds_symbols["test_build_finds_symbols()"]
+        project_graph_mapper_tests_test_core_py__TestQueryEngine_test_dead_code_finds_unused_symbols["test_dead_code_finds_unused_symbols()"]
+        project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_skip_venv["test_skip_venv()"]
+        project_graph_mapper_tests_test_core_py__TestQueryEngine_test_checklist_not_empty["test_checklist_not_empty()"]
+        project_graph_mapper_tests_test_core_py__TestQueryEngine_test_hotspots_returns_sorted["test_hotspots_returns_sorted()"]
+        project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_class_and_method["test_extracts_class_and_method()"]
+        project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_build_finds_all_files["test_build_finds_all_files()"]
+        project_graph_mapper_tests_test_core_py__TestQueryEngine_test_call_paths_finds_valid_paths["test_call_paths_finds_valid_paths()"]
+    end
+    subgraph SUB18 ["project-graph-mapper/tests/test_parsers.py"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_arrow_function["test_extracts_arrow_function()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_imports["test_extracts_imports()"]
+        project_graph_mapper_tests_test_parsers_py__TestRegistry_setup_method["setup_method()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_imports["test_extracts_imports()"]
+        project_graph_mapper_tests_test_parsers_py__TestRegistry_test_register_and_get_parser["test_register_and_get_parser()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_enum["test_extracts_enum()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_captures_comments["test_captures_comments()"]
+        project_graph_mapper_tests_test_parsers_py__TestJsTsImportResolution_test_relative_import_resolution["test_relative_import_resolution()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_class["test_extracts_class()"]
+        project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_struct["test_extracts_struct()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_methods["test_extracts_methods()"]
+        project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_methods_with_receiver["test_extracts_methods_with_receiver()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_functions["test_extracts_functions()"]
+        project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_enum["test_extracts_enum()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_struct["test_extracts_struct()"]
+        project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_function["test_extracts_function()"]
+        project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_finds_all_files["test_finds_all_files()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_function["test_extracts_function()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_methods["test_extracts_impl_methods()"]
+        project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_finds_symbols_across_languages["test_finds_symbols_across_languages()"]
+        project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_interface["test_extracts_interface()"]
+        project_graph_mapper_tests_test_parsers_py__TestRegistry_test_unsupported_extension_returns_none["test_unsupported_extension_returns_none()"]
+        project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_detects_all_languages["test_detects_all_languages()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_block["test_extracts_impl_block()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_trait["test_extracts_trait()"]
+        project_graph_mapper_tests_test_parsers_py__TestJsTsImportResolution_test_alias_and_baseurl_resolution["test_alias_and_baseurl_resolution()"]
+        project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_interface["test_extracts_interface()"]
+        project_graph_mapper_tests_test_parsers_py__TestRegistry_test_supported_extensions_lists_all["test_supported_extensions_lists_all()"]
+        project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_class_and_function["test_extracts_class_and_function()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_file_node_language["test_file_node_language()"]
+        project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_imports["test_extracts_imports()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_methods["test_extracts_methods()"]
+        project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_enum["test_extracts_enum()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_imports["test_extracts_imports()"]
+        project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_stats_include_all["test_stats_include_all()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_constructor["test_extracts_constructor()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_class["test_extracts_class()"]
+        project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_interface["test_extracts_interface()"]
+    end
+    subgraph SUB19 ["project-graph-mapper/tests/test_viz.py"]
+        project_graph_mapper_tests_test_viz_py__test_live_reload_server_lifecycle["test_live_reload_server_lifecycle()"]
+        project_graph_mapper_tests_test_viz_py__test_html_writer_generates_file_with_valid_json["test_html_writer_generates_file_with_valid_json()"]
+    end
+    project_graph_mapper_src_project_graph_mapper_cli_py__cycles --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__cycles --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__cycles --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_cli_py__cycles --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_cycles
+    project_graph_mapper_src_project_graph_mapper_cli_py__deadcode --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__deadcode --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__deadcode --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_cli_py__deadcode --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_dead_code
+    project_graph_mapper_src_project_graph_mapper_cli_py__hotspots --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__hotspots --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__hotspots --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_cli_py__hotspots --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_hotspots
+    project_graph_mapper_src_project_graph_mapper_cli_py__impact --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__impact --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__impact --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_cli_py__impact --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact
+    project_graph_mapper_src_project_graph_mapper_cli_py__impact --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter
+    project_graph_mapper_src_project_graph_mapper_cli_py__impact --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_impact
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_graph_builder_py___init_registry
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_engine_name
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_language_name
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_engine_name
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_language_name
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_base_py__registered_parsers
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TSXParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_engine_name
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__langs --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser_extensions
+    project_graph_mapper_src_project_graph_mapper_cli_py__path --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__path --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__path --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_cli_py__path --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_call_paths
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter_write
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context
+    project_graph_mapper_src_project_graph_mapper_cli_py__scan --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_mermaid
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter_write
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_mermaid
+    project_graph_mapper_src_project_graph_mapper_cli_py__viz --> project_graph_mapper_src_project_graph_mapper_watcher_py__start_watch
+    project_graph_mapper_src_project_graph_mapper_cli_py__watch --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_src_project_graph_mapper_cli_py__watch --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_src_project_graph_mapper_cli_py__watch --> project_graph_mapper_src_project_graph_mapper_watcher_py__start_watch
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder__collect_files --> project_graph_mapper_src_project_graph_mapper_parser_base_py__supported_extensions
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_language_name
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_language_name
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_base_py__get_parser
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_language_name
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_language_name
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_base_py__get_parser
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py___init_registry --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py___init_registry --> project_graph_mapper_src_project_graph_mapper_parser_base_py__clear_registry
+    project_graph_mapper_src_project_graph_mapper_graph_builder_py___init_registry --> project_graph_mapper_src_project_graph_mapper_parser_base_py__register
+    project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact_by_id --> project_graph_mapper_src_project_graph_mapper_cli_py__impact
+    project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write --> project_graph_mapper_src_project_graph_mapper_cli_py__cycles
+    project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write --> project_graph_mapper_src_project_graph_mapper_cli_py__hotspots
+    project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_cycles
+    project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_hotspots
+    project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context --> project_graph_mapper_src_project_graph_mapper_cli_py__cycles
+    project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context --> project_graph_mapper_src_project_graph_mapper_cli_py__hotspots
+    project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_cycles
+    project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_hotspots
+    project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser__build_result --> project_graph_mapper_src_project_graph_mapper_graph_models_py__FileNode
+    project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser__build_result --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Location
+    project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser__build_result --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Symbol
+    project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_graph_models_py__CallSite
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TSXParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_base_py__register --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser_extensions
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_children_by_type
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_receiver_type --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_symbols --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_type_spec --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__get_callee_name --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__extract_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__get_callee_name --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__walk_declarations --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym
+    project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__walk_declarations --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__extract_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_children_by_type
+    project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__extract_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__walk_symbols --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_children_by_type
+    project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__walk_symbols --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser__extract_class --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Location
+    project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser__extract_class --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Symbol
+    project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser__extract_function --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Location
+    project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser__extract_function --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Symbol
+    project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file --> project_graph_mapper_src_project_graph_mapper_graph_models_py__FileNode
+    project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_graph_models_py__CallSite
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_impl --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Location
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_impl --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Symbol
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_impl --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_impl --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_first_line
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_callee_name --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_impl_type_name --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__node_text
+    project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__walk_top_level --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__ --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__get_language
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__ --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__get_language
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__ --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__get_language
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__ --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TSXParser__get_language
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__ --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser__get_language
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__ --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_language
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__find_calls --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Location
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser__make_sym --> project_graph_mapper_src_project_graph_mapper_graph_models_py__Symbol
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_graph_models_py__FileNode
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_language_name
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_language_name
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_imports
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__extract_symbols
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__extract_imports
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__extract_symbols
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__extract_imports
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser__extract_symbols
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_imports
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__extract_symbols
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_graph_models_py__CallSite
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser__get_callee_name
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser__get_callee_name
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__find_calls
+    project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_resolve_calls --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser__get_callee_name
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler___init__ --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder___init__
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler___init__ --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine___init__
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler___init__ --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser___init__
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler___init__ --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser___init__
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler___init__ --> project_graph_mapper_src_project_graph_mapper_watcher_py___Handler___init__
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler_do_GET --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write
+    project_graph_mapper_src_project_graph_mapper_server_py__LiveReloadRequestHandler_do_GET --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter_write
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler___init__ --> project_graph_mapper_src_project_graph_mapper_parser_base_py__supported_extensions
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_update_file
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter_write
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_output_md_writer_py__MarkdownWriter_write_context
+    project_graph_mapper_src_project_graph_mapper_watcher_py___Handler__handle --> project_graph_mapper_src_project_graph_mapper_server_py__notify_reload
+    project_graph_mapper_src_project_graph_mapper_watcher_py__start_watch --> project_graph_mapper_src_project_graph_mapper_server_py__start_server
+    project_graph_mapper_src_project_graph_mapper_watcher_py__start_watch --> project_graph_mapper_src_project_graph_mapper_server_py__stop_server
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_build_finds_all_files --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_build_finds_all_files --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_build_finds_symbols --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_build_finds_symbols --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_resolve_used_by --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_resolve_used_by --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_skip_venv --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestGraphBuilder_test_skip_venv --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_docstring --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_docstring --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_docstring --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_docstring --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_docstring --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_imports --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_imports --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_imports --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_imports --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_captures_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_class_and_method --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_class_and_method --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_class_and_method --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_class_and_method --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_class_and_method --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_invalid_syntax_returns_empty --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_invalid_syntax_returns_empty --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_invalid_syntax_returns_empty --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_invalid_syntax_returns_empty --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestPythonParser_test_invalid_syntax_returns_empty --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_call_paths_finds_valid_paths --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_call_paths_finds_valid_paths --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_call_paths_finds_valid_paths --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_call_paths_finds_valid_paths --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_call_paths
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_checklist_not_empty --> project_graph_mapper_src_project_graph_mapper_cli_py__impact
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_checklist_not_empty --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_checklist_not_empty --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_checklist_not_empty --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_checklist_not_empty --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_dead_code_finds_unused_symbols --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_dead_code_finds_unused_symbols --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_dead_code_finds_unused_symbols --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_dead_code_finds_unused_symbols --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_dead_code
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_hotspots_returns_sorted --> project_graph_mapper_src_project_graph_mapper_cli_py__hotspots
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_hotspots_returns_sorted --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_hotspots_returns_sorted --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_hotspots_returns_sorted --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_hotspots_returns_sorted --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_hotspots
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_finds_direct_callers --> project_graph_mapper_src_project_graph_mapper_cli_py__impact
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_finds_direct_callers --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_finds_direct_callers --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_finds_direct_callers --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_finds_direct_callers --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_unknown_symbol --> project_graph_mapper_src_project_graph_mapper_cli_py__impact
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_unknown_symbol --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_unknown_symbol --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_unknown_symbol --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine
+    project_graph_mapper_tests_test_core_py__TestQueryEngine_test_impact_unknown_symbol --> project_graph_mapper_src_project_graph_mapper_graph_query_py__QueryEngine_impact
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_methods_with_receiver --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_methods_with_receiver --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_methods_with_receiver --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_methods_with_receiver --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_methods_with_receiver --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestGoParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_constructor --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_constructor --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_constructor --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_constructor --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_constructor --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_java_parser_py__JavaParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_captures_comments --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_captures_comments --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_captures_comments --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_captures_comments --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_captures_comments --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_arrow_function --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_arrow_function --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_arrow_function --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_arrow_function --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_arrow_function --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_class --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_functions --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_functions --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_functions --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_functions --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_functions --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_extracts_methods --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_file_node_language --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_file_node_language --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_file_node_language --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__JavaScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_file_node_language --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJavaScriptParser_test_file_node_language --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestJsTsImportResolution_test_alias_and_baseurl_resolution --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py___resolve_js_ts_import
+    project_graph_mapper_tests_test_parsers_py__TestJsTsImportResolution_test_relative_import_resolution --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py___resolve_js_ts_import
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_detects_all_languages --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_detects_all_languages --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_finds_all_files --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_finds_all_files --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_finds_symbols_across_languages --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_finds_symbols_across_languages --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_stats_include_all --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_parsers_py__TestMultiLangBuilder_test_stats_include_all --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_setup_method --> project_graph_mapper_src_project_graph_mapper_parser_base_py__clear_registry
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_register_and_get_parser --> project_graph_mapper_src_project_graph_mapper_parser_base_py__get_parser
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_register_and_get_parser --> project_graph_mapper_src_project_graph_mapper_parser_base_py__register
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_register_and_get_parser --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_supported_extensions_lists_all --> project_graph_mapper_src_project_graph_mapper_parser_base_py__register
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_supported_extensions_lists_all --> project_graph_mapper_src_project_graph_mapper_parser_base_py__supported_extensions
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_supported_extensions_lists_all --> project_graph_mapper_src_project_graph_mapper_parser_go_parser_py__GoParser
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_supported_extensions_lists_all --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser
+    project_graph_mapper_tests_test_parsers_py__TestRegistry_test_unsupported_extension_returns_none --> project_graph_mapper_src_project_graph_mapper_parser_base_py__get_parser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_function --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_block --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_block --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_block --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_block --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_block --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_methods --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_methods --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_methods --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_methods --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_impl_methods --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_imports --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_struct --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_trait --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_trait --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_trait --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_trait --> project_graph_mapper_src_project_graph_mapper_parser_rust_parser_py__RustParser
+    project_graph_mapper_tests_test_parsers_py__TestRustParser_test_extracts_trait --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_class_and_function --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_class_and_function --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_class_and_function --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_class_and_function --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_class_and_function --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_enum --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_ai_parser_py__AiParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_base_py__BaseParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_js_parser_py__TypeScriptParser
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_python_parser_py__PythonParser_parse_file
+    project_graph_mapper_tests_test_parsers_py__TestTypeScriptParser_test_extracts_interface --> project_graph_mapper_src_project_graph_mapper_parser_tree_sitter_base_py__TreeSitterParser_parse_file
+    project_graph_mapper_tests_test_viz_py__test_html_writer_generates_file_with_valid_json --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder
+    project_graph_mapper_tests_test_viz_py__test_html_writer_generates_file_with_valid_json --> project_graph_mapper_src_project_graph_mapper_graph_builder_py__GraphBuilder_build
+    project_graph_mapper_tests_test_viz_py__test_html_writer_generates_file_with_valid_json --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter
+    project_graph_mapper_tests_test_viz_py__test_html_writer_generates_file_with_valid_json --> project_graph_mapper_src_project_graph_mapper_output_html_writer_py__HtmlWriter_write
+    project_graph_mapper_tests_test_viz_py__test_html_writer_generates_file_with_valid_json --> project_graph_mapper_src_project_graph_mapper_output_json_writer_py__JsonWriter_write
+    project_graph_mapper_tests_test_viz_py__test_live_reload_server_lifecycle --> project_graph_mapper_src_project_graph_mapper_server_py__start_server
+    project_graph_mapper_tests_test_viz_py__test_live_reload_server_lifecycle --> project_graph_mapper_src_project_graph_mapper_server_py__stop_server

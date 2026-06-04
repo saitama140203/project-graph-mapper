@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "skills": {
+    "project-structure": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "dotnet/.github/skills/project-structure/SKILL.md",
+      "computedHash": "1941fb0e73fb086e9b61760aeb395cd7c4c88a8a6e85ab20598ff593dbe28ae3"
+    },
+    "python-code-quality": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "python/.github/skills/python-code-quality/SKILL.md",
+      "computedHash": "3c7adb35449a21047fecb887da671537e8650848e456ded7d201ee2df6def49c"
+    },
+    "python-development": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "python/.github/skills/python-development/SKILL.md",
+      "computedHash": "10d5cd6b243fdc9a0aa2d6698b5ecb9730175a42ae7e735de9686368144fecc9"
+    },
+    "python-feature-lifecycle": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "python/.github/skills/python-feature-lifecycle/SKILL.md",
+      "computedHash": "f58bcee8440281b372cc8fe001a8d280e9918e8b40ccc9b0b889e0da75133437"
+    },
+    "python-package-management": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "python/.github/skills/python-package-management/SKILL.md",
+      "computedHash": "e7d32add57ac794ea45cca41a729e14c03491b0d07f5b93a360c8bd911c08fdf"
+    },
+    "python-samples": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "python/.github/skills/python-samples/SKILL.md",
+      "computedHash": "864e17c0b7846c172a1c699354460ed521a0e9a9c6d66afd877aeb07a711eb2c"
+    },
+    "python-testing": {
+      "source": "microsoft/agent-framework",
+      "sourceType": "github",
+      "skillPath": "python/.github/skills/python-testing/SKILL.md",
+      "computedHash": "73d4e459e865146368fc7b8da94865c6b4872cd683c2a7eb8bb2e113e49a0e9a"
+    }
+  }
+}
