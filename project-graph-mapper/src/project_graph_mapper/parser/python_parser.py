@@ -140,8 +140,8 @@ class PythonParser(BaseParser):
             ctx = lines[node.lineno - 1].strip() if node.lineno <= len(lines) else ""
 
             for sym_id, sym in all_symbols.items():
-                # Tên khớp, không phải gọi chính mình
-                if sym.name == callee_name and not sym_id.startswith(rel + "::"):
+                # Tên khớp
+                if sym.name == callee_name:
                     # Tránh duplicate
                     already = any(cs.file == rel and cs.line == node.lineno for cs in sym.used_by)
                     if not already:

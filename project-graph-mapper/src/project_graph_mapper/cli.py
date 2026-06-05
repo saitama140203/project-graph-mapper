@@ -431,7 +431,9 @@ def path(start_symbol: str, end_symbol: str, project: str):
 
 @cli.command()
 @click.option("--project", "-p", default=".", type=click.Path(exists=True))
-def deadcode(project: str):
+@click.option("--ignore", "-i", multiple=True, help="Regex pattern để bỏ qua (VD: '^on_', '^do_')")
+@click.option("--include-classes", is_flag=True, help="Báo cáo cả class/struct không được dùng")
+def deadcode(project: str, ignore: tuple[str, ...], include_classes: bool):
     """Tìm các hàm, lớp không được gọi/sử dụng (Dead Code)."""
     from .graph.builder import GraphBuilder
     from .graph.query import QueryEngine
@@ -442,7 +444,14 @@ def deadcode(project: str):
     with console.status("[bold green]Đang phân tích dead code..."):
         builder.build(root)
 
-    dead_symbols = QueryEngine(builder.graph, builder.symbols).dead_code()
+    # Tự động bỏ qua các lệnh của chính PGM CLI nếu đang chạy cho chính PGM
+    cli_ignores = ["^scan$", "^viz$", "^watch$", "^path$", "^langs$", "^deadcode$", "^main$"]
+    combined_ignores = list(ignore) + cli_ignores
+
+    dead_symbols = QueryEngine(builder.graph, builder.symbols).dead_code(
+        ignore_patterns=combined_ignores,
+        include_classes=include_classes,
+    )
 
     if not dead_symbols:
         console.print("[green]Tuyệt vời! Không phát hiện symbol nào bị thừa (dead code)[/green]")

@@ -87,7 +87,7 @@ class TreeSitterParser(BaseParser):
             ctx = lines[line_num - 1].strip() if line_num <= len(lines) else ""
 
             for sym_id, sym in all_symbols.items():
-                if sym.name == callee_name and not sym_id.startswith(f"{rel}::"):
+                if sym.name == callee_name:
                     already = any(cs.file == rel and cs.line == line_num for cs in sym.used_by)
                     if not already:
                         sym.used_by.append(CallSite(file=rel, line=line_num, context=ctx))

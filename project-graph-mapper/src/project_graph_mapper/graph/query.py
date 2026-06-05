@@ -1,6 +1,6 @@
+import re
 import networkx as nx
-
-from .models import Symbol
+from .models import Symbol, SymbolKind
 
 
 class QueryEngine:
@@ -93,13 +93,45 @@ class QueryEngine:
 
     # ── Dead Code ────────────────────────────────────────────────────────────
 
-    def dead_code(self) -> list[str]:
+    def dead_code(
+        self,
+        ignore_patterns: list[str] = None,
+        include_classes: bool = False,
+    ) -> list[str]:
         """Tìm các symbol không có incoming edge (0 call sites) và không phải entry point."""
+        if ignore_patterns is None:
+            ignore_patterns = []
+        
+        # Mặc định bỏ qua các hooks/framework pattern phổ biến
+        default_ignores = [
+            r"^__.*__$",      # Magic methods
+            r"^test_.*",      # Test functions
+            r"^on_.*",        # Watchdog / Event hooks
+            r"^do_[A-Z]+$",   # HTTP handlers
+            r".*_factory$",   # Factories
+            r"^log_message$", # Override logger
+        ]
+        patterns = [re.compile(p) for p in ignore_patterns + default_ignores]
+
+        # Chỉ xét Function, Method trừ khi user muốn check cả Class/Struct
+        valid_kinds = {SymbolKind.FUNCTION, SymbolKind.METHOD}
+        if include_classes:
+            valid_kinds.update({
+                SymbolKind.CLASS, SymbolKind.INTERFACE,
+                SymbolKind.STRUCT, SymbolKind.ENUM, SymbolKind.TRAIT
+            })
+
         dead_symbols = []
         for sid, sym in self.symbols.items():
+            if sym.kind not in valid_kinds:
+                continue
+
             if self.graph.has_node(sid):
                 in_degree = self.graph.in_degree(sid)
                 if in_degree == 0:
+                    # Kiểm tra xem tên symbol có match với bất kỳ mẫu ignore nào không
+                    if any(p.match(sym.name) for p in patterns):
+                        continue
                     dead_symbols.append(sid)
         return sorted(dead_symbols)
 
