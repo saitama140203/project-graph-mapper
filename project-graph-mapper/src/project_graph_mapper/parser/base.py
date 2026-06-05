@@ -5,8 +5,8 @@ from pathlib import Path
 
 from ..graph.models import FileNode, Symbol
 
-
 # ── Abstract base ────────────────────────────────────────────────────────────
+
 
 class BaseParser(ABC):
     """Interface mà mọi language parser phải implement."""

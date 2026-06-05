@@ -15,7 +15,6 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-
 console = Console()
 
 
@@ -27,13 +26,20 @@ def cli():
 
 # ── scan ──────────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.argument("project_path", default=".", type=click.Path(exists=True))
 @click.option("--output", "-o", default=".pgm", show_default=True, help="Thư mục output")
 @click.option("--ai", "use_ai", is_flag=True, help="Bật AI parser cho extensions chỉ định")
-@click.option("--ai-ext", multiple=True, help="Extension dùng AI (ví dụ: --ai-ext .vue --ai-ext .svelte)")
+@click.option(
+    "--ai-ext", multiple=True, help="Extension dùng AI (ví dụ: --ai-ext .vue --ai-ext .svelte)"
+)
 @click.option("--ai-all", is_flag=True, help="Dùng AI cho tất cả file")
 @click.option("--ai-model", default="claude-sonnet-4-20250514", show_default=True, help="AI model")
+@click.option("--summary", is_flag=True, help="Thêm Project Summary vào CONTEXT.md (từ README)")
+@click.option(
+    "--summary-ai", is_flag=True, help="Dùng DeepSeek AI để tự tóm tắt hệ thống"
+)
 def scan(
     project_path: str,
     output: str,
@@ -41,13 +47,15 @@ def scan(
     ai_ext: tuple[str, ...],
     ai_all: bool,
     ai_model: str,
+    summary: bool,
+    summary_ai: bool,
 ) -> None:
     """Quét project, sinh graph.json và CONTEXT.md."""
     from .graph.builder import GraphBuilder
     from .output.json_writer import JsonWriter
     from .output.md_writer import MarkdownWriter
 
-    root    = Path(project_path).resolve()
+    root = Path(project_path).resolve()
     out_dir = root / output
     out_dir.mkdir(exist_ok=True)
 
@@ -60,7 +68,9 @@ def scan(
 
     ai_api_key = os.environ.get("ANTHROPIC_API_KEY")
     if ai_extensions and not ai_api_key:
-        console.print("[yellow]Warning:[/yellow] ANTHROPIC_API_KEY not set — AI parser sẽ bị bỏ qua")
+        console.print(
+            "[yellow]Warning:[/yellow] ANTHROPIC_API_KEY not set — AI parser sẽ bị bỏ qua"
+        )
 
     with console.status("[bold green]Đang quét project..."):
         builder = GraphBuilder(
@@ -79,23 +89,26 @@ def scan(
     # Language breakdown summary
     _print_language_summary(builder)
 
+    # ── Project Summary ──────────────────────────────────────────────────
+    summary_text = _resolve_summary(root, builder, summary=summary, summary_ai=summary_ai)
+
     JsonWriter().write(builder.files, builder.symbols, out_dir / "graph.json")
     MarkdownWriter().write_context(
-        builder.files, builder.symbols, builder.graph, out_dir / "CONTEXT.md"
+        builder.files, builder.symbols, builder.graph, out_dir / "CONTEXT.md",
+        summary=summary_text,
     )
-    MarkdownWriter().write_mermaid(
-        builder.symbols, out_dir / "graph.mermaid"
-    )
+    MarkdownWriter().write_mermaid(builder.symbols, out_dir / "graph.mermaid")
 
     console.print(f"\nOutput → [bold]{out_dir}[/bold]")
-    console.print(f"  [cyan]CONTEXT.md[/cyan]     — paste vào AI để dùng ngay")
-    console.print(f"  [cyan]graph.json[/cyan]      — dùng cho IDE/plugin")
-    console.print(f"  [cyan]graph.mermaid[/cyan]   — xem biểu đồ call graph trên Mermaid")
+    console.print("  [cyan]CONTEXT.md[/cyan]     — paste vào AI để dùng ngay")
+    console.print("  [cyan]graph.json[/cyan]      — dùng cho IDE/plugin")
+    console.print("  [cyan]graph.mermaid[/cyan]   — xem biểu đồ call graph trên Mermaid")
 
 
 def _print_language_summary(builder) -> None:
     """In bảng tóm tắt ngôn ngữ."""
     from collections import Counter
+
     lang_files: Counter[str] = Counter()
     lang_symbols: Counter[str] = Counter()
 
@@ -115,7 +128,54 @@ def _print_language_summary(builder) -> None:
         console.print(table)
 
 
+def _resolve_summary(
+    root: Path,
+    builder,
+    *,
+    summary: bool,
+    summary_ai: bool,
+) -> str | None:
+    """Tạo project summary dựa trên flags."""
+    if not summary and not summary_ai:
+        return None
+
+    from .output.summarizer import (
+        extract_summary_from_file,
+        find_summary_file,
+        generate_summary_with_ai,
+    )
+
+    # Nếu user muốn dùng AI summary
+    if summary_ai:
+        ds_key = os.environ.get("DEEPSEEK_API_KEY", "")
+        if not ds_key:
+            console.print(
+                "[yellow]Warning:[/yellow] DEEPSEEK_API_KEY not set — bỏ qua AI summary"
+            )
+        else:
+            with console.status("[bold cyan]Đang tạo AI summary (DeepSeek)..."):
+                text = generate_summary_with_ai(
+                    builder.files,
+                    builder.symbols,
+                    api_key=ds_key,
+                )
+            if text:
+                console.print("[green]✓[/green] Đã tạo AI summary")
+                return text
+            console.print("[yellow]Warning:[/yellow] AI summary thất bại")
+
+    # Fallback hoặc --summary: tìm file .md có sẵn
+    md_file = find_summary_file(root)
+    if md_file:
+        console.print(f"[green]✓[/green] Tìm thấy summary từ [cyan]{md_file.name}[/cyan]")
+        return extract_summary_from_file(md_file)
+
+    console.print("[dim]Không tìm thấy file summary (README.md, ...) — bỏ qua[/dim]")
+    return None
+
+
 # ── langs ─────────────────────────────────────────────────────────────────────
+
 
 @cli.command()
 def langs():
@@ -154,6 +214,7 @@ def langs():
 
 # ── impact ────────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.argument("symbol_name")
 @click.option("--project", "-p", default=".", show_default=True, type=click.Path(exists=True))
@@ -164,7 +225,7 @@ def impact(symbol_name: str, project: str, save: bool):
     from .graph.query import QueryEngine
     from .output.md_writer import MarkdownWriter
 
-    root    = Path(project).resolve()
+    root = Path(project).resolve()
     builder = GraphBuilder()
 
     with console.status("[bold green]Đang quét..."):
@@ -224,6 +285,7 @@ def impact(symbol_name: str, project: str, save: bool):
 
 # ── hotspots ──────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.option("--project", "-p", default=".", type=click.Path(exists=True))
 @click.option("--top", "-n", default=10, show_default=True, help="Số symbol hiển thị")
@@ -232,7 +294,7 @@ def hotspots(project: str, top: int):
     from .graph.builder import GraphBuilder
     from .graph.query import QueryEngine
 
-    root    = Path(project).resolve()
+    root = Path(project).resolve()
     builder = GraphBuilder()
 
     with console.status("[bold green]Đang phân tích..."):
@@ -245,11 +307,11 @@ def hotspots(project: str, top: int):
         return
 
     table = Table(title=f"Top {top} hotspot symbols", show_lines=True)
-    table.add_column("#",       style="dim",    justify="right", width=4)
-    table.add_column("Symbol",  style="cyan")
-    table.add_column("Kind",    style="magenta")
-    table.add_column("File",    style="white")
-    table.add_column("Line",    style="yellow", justify="right")
+    table.add_column("#", style="dim", justify="right", width=4)
+    table.add_column("Symbol", style="cyan")
+    table.add_column("Kind", style="magenta")
+    table.add_column("File", style="white")
+    table.add_column("Line", style="yellow", justify="right")
     table.add_column("Callers", style="bold red", justify="right")
 
     for rank, (sid, score) in enumerate(results, 1):
@@ -267,6 +329,7 @@ def hotspots(project: str, top: int):
 
 # ── watch ─────────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.option("--project", "-p", default=".", type=click.Path(exists=True))
 @click.option("--output", "-o", default=".pgm", show_default=True)
@@ -277,7 +340,7 @@ def watch(project: str, output: str, use_ai: bool, ai_ext: tuple[str, ...]):
     from .graph.builder import GraphBuilder
     from .watcher import start_watch
 
-    root    = Path(project).resolve()
+    root = Path(project).resolve()
     out_dir = root / output
     out_dir.mkdir(exist_ok=True)
 
@@ -294,14 +357,14 @@ def watch(project: str, output: str, use_ai: bool, ai_ext: tuple[str, ...]):
 
     s = builder.stats
     console.print(
-        f"[green]Sẵn sàng![/green] "
-        f"{s['total_files']} files · {s['total_symbols']} symbols"
+        f"[green]Sẵn sàng![/green] {s['total_files']} files · {s['total_symbols']} symbols"
     )
 
     start_watch(root, builder, out_dir, console)
 
 
 # ── cycles ────────────────────────────────────────────────────────────────────
+
 
 @cli.command()
 @click.option("--project", "-p", default=".", type=click.Path(exists=True))
@@ -310,7 +373,7 @@ def cycles(project: str):
     from .graph.builder import GraphBuilder
     from .graph.query import QueryEngine
 
-    root    = Path(project).resolve()
+    root = Path(project).resolve()
     builder = GraphBuilder()
 
     with console.status("[bold green]Đang phân tích..."):
@@ -329,6 +392,7 @@ def cycles(project: str):
 
 # ── path ──────────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.argument("start_symbol")
 @click.argument("end_symbol")
@@ -338,7 +402,7 @@ def path(start_symbol: str, end_symbol: str, project: str):
     from .graph.builder import GraphBuilder
     from .graph.query import QueryEngine
 
-    root    = Path(project).resolve()
+    root = Path(project).resolve()
     builder = GraphBuilder()
 
     with console.status("[bold green]Đang tìm đường đi..."):
@@ -347,7 +411,9 @@ def path(start_symbol: str, end_symbol: str, project: str):
     found_paths = QueryEngine(builder.graph, builder.symbols).call_paths(start_symbol, end_symbol)
 
     if not found_paths:
-        console.print(f"[yellow]Không tìm thấy đường dẫn cuộc gọi từ '{start_symbol}' đến '{end_symbol}'[/yellow]")
+        console.print(
+            f"[yellow]Không tìm thấy đường dẫn cuộc gọi từ '{start_symbol}' đến '{end_symbol}'[/yellow]"
+        )
         return
 
     console.print(f"[green]Tìm thấy {len(found_paths)} đường đi:[/green]")
@@ -362,6 +428,7 @@ def path(start_symbol: str, end_symbol: str, project: str):
 
 # ── deadcode ──────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.option("--project", "-p", default=".", type=click.Path(exists=True))
 def deadcode(project: str):
@@ -369,7 +436,7 @@ def deadcode(project: str):
     from .graph.builder import GraphBuilder
     from .graph.query import QueryEngine
 
-    root    = Path(project).resolve()
+    root = Path(project).resolve()
     builder = GraphBuilder()
 
     with console.status("[bold green]Đang phân tích dead code..."):
@@ -391,7 +458,9 @@ def deadcode(project: str):
         console.print("[green]Không phát hiện dead code ngoài các file test.[/green]")
         return
 
-    table = Table(title=f"Tìm thấy {len(filtered_dead)} symbol có thể không được sử dụng", show_lines=True)
+    table = Table(
+        title=f"Tìm thấy {len(filtered_dead)} symbol có thể không được sử dụng", show_lines=True
+    )
     table.add_column("Symbol", style="cyan")
     table.add_column("Kind", style="magenta")
     table.add_column("File", style="white")
@@ -409,14 +478,21 @@ def deadcode(project: str):
 
 # ── viz ───────────────────────────────────────────────────────────────────────
 
+
 @cli.command()
 @click.argument("project_path", default=".", type=click.Path(exists=True))
 @click.option("--output", "-o", default=".pgm", show_default=True, help="Thư mục output")
 @click.option("--no-open", is_flag=True, help="Chỉ sinh file, không tự động mở trình duyệt")
 @click.option("--ai", "use_ai", is_flag=True, help="Bật AI parser cho extensions chỉ định")
-@click.option("--ai-ext", multiple=True, help="Extension dùng AI (ví dụ: --ai-ext .vue --ai-ext .svelte)")
+@click.option(
+    "--ai-ext", multiple=True, help="Extension dùng AI (ví dụ: --ai-ext .vue --ai-ext .svelte)"
+)
 @click.option("--ai-all", is_flag=True, help="Dùng AI cho tất cả file")
 @click.option("--ai-model", default="claude-sonnet-4-20250514", show_default=True, help="AI model")
+@click.option("--summary", is_flag=True, help="Thêm Project Summary vào CONTEXT.md (từ README)")
+@click.option(
+    "--summary-ai", is_flag=True, help="Dùng DeepSeek AI để tự tóm tắt hệ thống"
+)
 def viz(
     project_path: str,
     output: str,
@@ -425,15 +501,16 @@ def viz(
     ai_ext: tuple[str, ...],
     ai_all: bool,
     ai_model: str,
+    summary: bool,
+    summary_ai: bool,
 ) -> None:
     """Quét project và hiển thị đồ thị tương tác (interactive graph)."""
-    import webbrowser
     from .graph.builder import GraphBuilder
-    from .output.json_writer import JsonWriter
     from .output.html_writer import HtmlWriter
+    from .output.json_writer import JsonWriter
     from .output.md_writer import MarkdownWriter
 
-    root    = Path(project_path).resolve()
+    root = Path(project_path).resolve()
     out_dir = root / output
     out_dir.mkdir(exist_ok=True)
 
@@ -445,7 +522,9 @@ def viz(
 
     ai_api_key = os.environ.get("ANTHROPIC_API_KEY")
     if ai_extensions and not ai_api_key:
-        console.print("[yellow]Warning:[/yellow] ANTHROPIC_API_KEY not set — AI parser sẽ bị bỏ qua")
+        console.print(
+            "[yellow]Warning:[/yellow] ANTHROPIC_API_KEY not set — AI parser sẽ bị bỏ qua"
+        )
 
     with console.status("[bold green]Đang quét project để dựng đồ thị..."):
         builder = GraphBuilder(
@@ -464,15 +543,18 @@ def viz(
     # In tóm tắt ngôn ngữ
     _print_language_summary(builder)
 
+    # ── Project Summary ──────────────────────────────────────────────────
+    summary_text = _resolve_summary(root, builder, summary=summary, summary_ai=summary_ai)
+
     # Ghi file json và html
     json_path = out_dir / "graph.json"
     html_path = out_dir / "graph.html"
-    
+
     JsonWriter().write(builder.files, builder.symbols, json_path)
     HtmlWriter().write(builder.files, builder.symbols, html_path)
     MarkdownWriter().write_mermaid(builder.symbols, out_dir / "graph.mermaid")
 
-    console.print(f"\n[green]Đã sinh đồ thị thành công:[/green]")
+    console.print("\n[green]Đã sinh đồ thị thành công:[/green]")
     console.print(f"  HTML: [bold cyan]{html_path}[/bold cyan]")
     console.print(f"  JSON: [bold cyan]{json_path}[/bold cyan]")
     console.print(f"  MMD:  [bold cyan]{out_dir / 'graph.mermaid'}[/bold cyan]")
@@ -480,9 +562,9 @@ def viz(
     if not no_open:
         console.print("\nĐang khởi chạy Live-Reload Server và Watch Mode...")
         from .watcher import start_watch
-        start_watch(root, builder, out_dir, console, open_browser=True)
+
+        start_watch(root, builder, out_dir, console, open_browser=True, summary=summary_text)
 
 
 def main():
     cli()
-

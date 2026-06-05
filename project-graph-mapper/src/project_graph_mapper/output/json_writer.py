@@ -7,20 +7,19 @@ from ..graph.models import FileNode, Symbol
 
 
 class JsonWriter:
-
     def write(
         self,
-        files:   dict[str, FileNode],
+        files: dict[str, FileNode],
         symbols: dict[str, Symbol],
         output_path: Path,
     ) -> Path:
         data = {
             "generated": datetime.now().isoformat(),
             "stats": {
-                "total_files":   len(files),
+                "total_files": len(files),
                 "total_symbols": len(symbols),
             },
-            "files":   {k: asdict(v) for k, v in files.items()},
+            "files": {k: asdict(v) for k, v in files.items()},
             "symbols": {k: asdict(v) for k, v in symbols.items()},
         }
         output_path.write_text(

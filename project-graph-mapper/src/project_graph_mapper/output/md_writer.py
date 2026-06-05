@@ -8,32 +8,43 @@ import networkx as nx
 
 from ..graph.models import FileNode, Symbol
 from ..graph.query import QueryEngine
-from ..parser.base import get_parser
 
 
 class MarkdownWriter:
-
     # ── CONTEXT.md — overview toàn project ───────────────────────────────────
 
     def write_context(
         self,
-        files:   dict[str, FileNode],
+        files: dict[str, FileNode],
         symbols: dict[str, Symbol],
-        graph:   nx.DiGraph,
+        graph: nx.DiGraph,
         output_path: Path,
+        *,
+        summary: str | None = None,
     ) -> Path:
-        qe   = QueryEngine(graph, symbols)
-        now  = datetime.now().strftime("%Y-%m-%d %H:%M")
+        qe = QueryEngine(graph, symbols)
+        now = datetime.now().strftime("%Y-%m-%d %H:%M")
         lines: list[str] = []
 
         lines += [
-            f"# Project Context Snapshot",
-            f"",
+            "# Project Context Snapshot",
+            "",
             f"> Generated: {now}  |  Files: {len(files)}  |  Symbols: {len(symbols)}",
-            f"",
-            f"---",
-            f"",
+            "",
+            "---",
+            "",
         ]
+
+        # ── Project Summary (nếu có) ─────────────────────────────────────────
+        if summary:
+            lines += [
+                "## Project Summary",
+                "",
+                summary,
+                "",
+                "---",
+                "",
+            ]
 
         # ── Language breakdown ────────────────────────────────────────────────
         lines += self._language_breakdown(files)
@@ -41,11 +52,13 @@ class MarkdownWriter:
         # ── Entry points ─────────────────────────────────────────────────────
         lines += ["## Entry points", ""]
         all_imports = {imp for f in files.values() for imp in f.imports}
-        entries = sorted([
-            f for f in files
-            if f.replace("/", ".").rstrip(".py") not in all_imports
-            and not f.startswith("test")
-        ])
+        entries = sorted(
+            [
+                f
+                for f in files
+                if f.replace("/", ".").rstrip(".py") not in all_imports and not f.startswith("test")
+            ]
+        )
         for e in entries[:15]:
             sym_count = len(files[e].symbols)
             lines.append(f"- `{e}` ({sym_count} symbols)")
@@ -100,15 +113,15 @@ class MarkdownWriter:
 
         lines += [
             f"# Impact report: `{sym.name}()`",
-            f"",
+            "",
             f"> File: `{sym.loc.file}:{sym.loc.line}`  |  Generated: {now}",
-            f">",
+            ">",
             f"> Signature: `{sym.signature}`",
-            f"",
-            f"---",
-            f"",
+            "",
+            "---",
+            "",
             f"**Impact score: {result['impact_score']} file(s) bị ảnh hưởng**",
-            f"",
+            "",
         ]
 
         # ── Direct callers ────────────────────────────────────────────────────
@@ -170,15 +183,14 @@ class MarkdownWriter:
             return []
 
         lines = [
-            "## Language breakdown", "",
+            "## Language breakdown",
+            "",
             "| Language | Files | Symbols | Engine |",
             "|----------|-------|---------|--------|",
         ]
         for lang, count in lang_files.most_common():
             engine = lang_engine.get(lang, "tree-sitter")
-            lines.append(
-                f"| {lang.capitalize()} | {count} | {lang_symbols[lang]} | {engine} |"
-            )
+            lines.append(f"| {lang.capitalize()} | {count} | {lang_symbols[lang]} | {engine} |")
         lines.append("")
 
         return lines
@@ -190,10 +202,10 @@ class MarkdownWriter:
     ) -> Path:
         """Sinh file đồ thị dạng Mermaid biểu diễn call graph."""
         lines = ["graph TD"]
-        
+
         connections = []
         connected_symbols = set()
-        
+
         for sym_id, sym in symbols.items():
             for target_id in sym.uses:
                 if target_id in symbols:
@@ -208,10 +220,12 @@ class MarkdownWriter:
 
         subgraph_id = 0
         for fpath, syms in sorted(files_map.items()):
-            lines.append(f"    subgraph SUB{subgraph_id} [\"{fpath}\"]")
+            lines.append(f'    subgraph SUB{subgraph_id} ["{fpath}"]')
             for sym in syms:
-                safe_id = sym.id.replace("/", "_").replace(".", "_").replace(":", "_").replace("-", "_")
-                lines.append(f"        {safe_id}[\"{sym.name}()\"]")
+                safe_id = (
+                    sym.id.replace("/", "_").replace(".", "_").replace(":", "_").replace("-", "_")
+                )
+                lines.append(f'        {safe_id}["{sym.name}()"]')
             lines.append("    end")
             subgraph_id += 1
 
@@ -222,5 +236,3 @@ class MarkdownWriter:
 
         output_path.write_text("\n".join(lines), encoding="utf-8")
         return output_path
-
-

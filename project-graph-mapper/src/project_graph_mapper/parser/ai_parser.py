@@ -6,8 +6,8 @@ import logging
 import os
 from pathlib import Path
 
-from .base import BaseParser
 from ..graph.models import CallSite, FileNode, Location, Symbol, SymbolKind
+from .base import BaseParser
 
 logger = logging.getLogger(__name__)
 
@@ -36,14 +36,14 @@ File ({ext}):
 """
 
 _KIND_MAP: dict[str, SymbolKind] = {
-    "function":  SymbolKind.FUNCTION,
-    "class":     SymbolKind.CLASS,
-    "method":    SymbolKind.METHOD,
-    "struct":    SymbolKind.STRUCT,
+    "function": SymbolKind.FUNCTION,
+    "class": SymbolKind.CLASS,
+    "method": SymbolKind.METHOD,
+    "struct": SymbolKind.STRUCT,
     "interface": SymbolKind.INTERFACE,
-    "enum":      SymbolKind.ENUM,
-    "trait":     SymbolKind.TRAIT,
-    "constant":  SymbolKind.CONSTANT,
+    "enum": SymbolKind.ENUM,
+    "trait": SymbolKind.TRAIT,
+    "constant": SymbolKind.CONSTANT,
 }
 
 

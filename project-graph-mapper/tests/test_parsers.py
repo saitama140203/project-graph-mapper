@@ -1,4 +1,5 @@
 """Tests for multi-language parsers (v0.2.0)."""
+
 from __future__ import annotations
 
 import textwrap
@@ -8,19 +9,24 @@ import pytest
 
 from project_graph_mapper.graph.builder import GraphBuilder
 from project_graph_mapper.graph.models import SymbolKind
-from project_graph_mapper.parser.base import clear_registry, register, get_parser, supported_extensions
-
+from project_graph_mapper.parser.base import (
+    clear_registry,
+    get_parser,
+    register,
+    supported_extensions,
+)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # JavaScript Parser
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestJavaScriptParser:
 
+class TestJavaScriptParser:
     @pytest.fixture
     def js_file(self, tmp_path: Path) -> tuple[Path, Path]:
         f = tmp_path / "app.js"
-        f.write_text(textwrap.dedent("""\
+        f.write_text(
+            textwrap.dedent("""\
             import { Router } from 'express';
 
             function greet(name) {
@@ -42,11 +48,14 @@ class TestJavaScriptParser:
             };
 
             module.exports = { greet, UserService, fetchData };
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
         return f, tmp_path
 
     def test_extracts_functions(self, js_file):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         fpath, root = js_file
         parser = JavaScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -56,6 +65,7 @@ class TestJavaScriptParser:
 
     def test_extracts_class(self, js_file):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         fpath, root = js_file
         parser = JavaScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -65,6 +75,7 @@ class TestJavaScriptParser:
 
     def test_extracts_methods(self, js_file):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         fpath, root = js_file
         parser = JavaScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -75,6 +86,7 @@ class TestJavaScriptParser:
 
     def test_extracts_arrow_function(self, js_file):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         fpath, root = js_file
         parser = JavaScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -84,6 +96,7 @@ class TestJavaScriptParser:
 
     def test_extracts_imports(self, js_file):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         fpath, root = js_file
         parser = JavaScriptParser()
         file_node, _ = parser.parse_file(fpath, root)
@@ -92,6 +105,7 @@ class TestJavaScriptParser:
 
     def test_file_node_language(self, js_file):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         fpath, root = js_file
         parser = JavaScriptParser()
         file_node, _ = parser.parse_file(fpath, root)
@@ -99,8 +113,10 @@ class TestJavaScriptParser:
 
     def test_captures_comments(self, tmp_path: Path):
         from project_graph_mapper.parser.js_parser import JavaScriptParser
+
         f = tmp_path / "comments.js"
-        f.write_text(textwrap.dedent("""
+        f.write_text(
+            textwrap.dedent("""
             // This is a line comment
             // second line
             function greet() {}
@@ -112,36 +128,38 @@ class TestJavaScriptParser:
                  */
                 find() {}
             }
-        """), encoding="utf-8")
-        
+        """),
+            encoding="utf-8",
+        )
+
         parser = JavaScriptParser()
         _, symbols = parser.parse_file(f, tmp_path)
-        
+
         # Check greet docstring
         greet_sym = next(s for s in symbols if s.name == "greet")
         assert "This is a line comment" in greet_sym.docstring
         assert "second line" in greet_sym.docstring
-        
+
         # Check User docstring
         user_sym = next(s for s in symbols if s.name == "User")
         assert "This is a block comment" in user_sym.docstring
-        
+
         # Check find docstring
         find_sym = next(s for s in symbols if s.name == "find")
         assert "Method comment" in find_sym.docstring
-
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TypeScript Parser
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestTypeScriptParser:
 
+class TestTypeScriptParser:
     @pytest.fixture
     def ts_file(self, tmp_path: Path) -> tuple[Path, Path]:
         f = tmp_path / "service.ts"
-        f.write_text(textwrap.dedent("""\
+        f.write_text(
+            textwrap.dedent("""\
             import { Database } from './db';
 
             interface UserRepo {
@@ -164,11 +182,14 @@ class TestTypeScriptParser:
             export function createService(db: Database): UserService {
                 return new UserService(db);
             }
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
         return f, tmp_path
 
     def test_extracts_interface(self, ts_file):
         from project_graph_mapper.parser.js_parser import TypeScriptParser
+
         fpath, root = ts_file
         parser = TypeScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -178,6 +199,7 @@ class TestTypeScriptParser:
 
     def test_extracts_enum(self, ts_file):
         from project_graph_mapper.parser.js_parser import TypeScriptParser
+
         fpath, root = ts_file
         parser = TypeScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -187,6 +209,7 @@ class TestTypeScriptParser:
 
     def test_extracts_class_and_function(self, ts_file):
         from project_graph_mapper.parser.js_parser import TypeScriptParser
+
         fpath, root = ts_file
         parser = TypeScriptParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -200,12 +223,13 @@ class TestTypeScriptParser:
 # Go Parser
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestGoParser:
 
+class TestGoParser:
     @pytest.fixture
     def go_file(self, tmp_path: Path) -> tuple[Path, Path]:
         f = tmp_path / "server.go"
-        f.write_text(textwrap.dedent("""\
+        f.write_text(
+            textwrap.dedent("""\
             package main
 
             import (
@@ -234,11 +258,14 @@ class TestGoParser:
             func (s *Server) Stop() {
                 fmt.Println("Stopping server")
             }
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
         return f, tmp_path
 
     def test_extracts_struct(self, go_file):
         from project_graph_mapper.parser.go_parser import GoParser
+
         fpath, root = go_file
         parser = GoParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -248,6 +275,7 @@ class TestGoParser:
 
     def test_extracts_interface(self, go_file):
         from project_graph_mapper.parser.go_parser import GoParser
+
         fpath, root = go_file
         parser = GoParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -257,6 +285,7 @@ class TestGoParser:
 
     def test_extracts_function(self, go_file):
         from project_graph_mapper.parser.go_parser import GoParser
+
         fpath, root = go_file
         parser = GoParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -266,6 +295,7 @@ class TestGoParser:
 
     def test_extracts_methods_with_receiver(self, go_file):
         from project_graph_mapper.parser.go_parser import GoParser
+
         fpath, root = go_file
         parser = GoParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -281,6 +311,7 @@ class TestGoParser:
 
     def test_extracts_imports(self, go_file):
         from project_graph_mapper.parser.go_parser import GoParser
+
         fpath, root = go_file
         parser = GoParser()
         file_node, _ = parser.parse_file(fpath, root)
@@ -293,12 +324,13 @@ class TestGoParser:
 # Rust Parser
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestRustParser:
 
+class TestRustParser:
     @pytest.fixture
     def rs_file(self, tmp_path: Path) -> tuple[Path, Path]:
         f = tmp_path / "lib.rs"
-        f.write_text(textwrap.dedent("""\
+        f.write_text(
+            textwrap.dedent("""\
             use std::io::Read;
             use std::collections::HashMap;
 
@@ -333,11 +365,14 @@ class TestRustParser:
             pub fn greet(name: &str) -> String {
                 format!("Hello, {}!", name)
             }
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
         return f, tmp_path
 
     def test_extracts_struct(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -347,6 +382,7 @@ class TestRustParser:
 
     def test_extracts_enum(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -356,6 +392,7 @@ class TestRustParser:
 
     def test_extracts_trait(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -365,6 +402,7 @@ class TestRustParser:
 
     def test_extracts_impl_methods(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -380,6 +418,7 @@ class TestRustParser:
 
     def test_extracts_function(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -389,6 +428,7 @@ class TestRustParser:
 
     def test_extracts_imports(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         file_node, _ = parser.parse_file(fpath, root)
@@ -398,6 +438,7 @@ class TestRustParser:
 
     def test_extracts_impl_block(self, rs_file):
         from project_graph_mapper.parser.rust_parser import RustParser
+
         fpath, root = rs_file
         parser = RustParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -411,12 +452,13 @@ class TestRustParser:
 # Java Parser
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestJavaParser:
 
+class TestJavaParser:
     @pytest.fixture
     def java_file(self, tmp_path: Path) -> tuple[Path, Path]:
         f = tmp_path / "UserService.java"
-        f.write_text(textwrap.dedent("""\
+        f.write_text(
+            textwrap.dedent("""\
             import com.example.db.Database;
             import com.example.models.User;
 
@@ -445,11 +487,14 @@ class TestJavaParser:
                     db.delete(User.class, id);
                 }
             }
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
         return f, tmp_path
 
     def test_extracts_class(self, java_file):
         from project_graph_mapper.parser.java_parser import JavaParser
+
         fpath, root = java_file
         parser = JavaParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -459,6 +504,7 @@ class TestJavaParser:
 
     def test_extracts_interface(self, java_file):
         from project_graph_mapper.parser.java_parser import JavaParser
+
         fpath, root = java_file
         parser = JavaParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -468,6 +514,7 @@ class TestJavaParser:
 
     def test_extracts_enum(self, java_file):
         from project_graph_mapper.parser.java_parser import JavaParser
+
         fpath, root = java_file
         parser = JavaParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -477,6 +524,7 @@ class TestJavaParser:
 
     def test_extracts_methods(self, java_file):
         from project_graph_mapper.parser.java_parser import JavaParser
+
         fpath, root = java_file
         parser = JavaParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -488,6 +536,7 @@ class TestJavaParser:
 
     def test_extracts_constructor(self, java_file):
         from project_graph_mapper.parser.java_parser import JavaParser
+
         fpath, root = java_file
         parser = JavaParser()
         _, symbols = parser.parse_file(fpath, root)
@@ -497,6 +546,7 @@ class TestJavaParser:
 
     def test_extracts_imports(self, java_file):
         from project_graph_mapper.parser.java_parser import JavaParser
+
         fpath, root = java_file
         parser = JavaParser()
         file_node, _ = parser.parse_file(fpath, root)
@@ -509,13 +559,14 @@ class TestJavaParser:
 # Registry
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestRegistry:
 
+class TestRegistry:
     def setup_method(self):
         clear_registry()
 
     def test_register_and_get_parser(self):
         from project_graph_mapper.parser.python_parser import PythonParser
+
         p = PythonParser()
         register(p)
         assert get_parser(Path("test.py")) is p
@@ -524,8 +575,9 @@ class TestRegistry:
         assert get_parser(Path("test.xyz")) is None
 
     def test_supported_extensions_lists_all(self):
-        from project_graph_mapper.parser.python_parser import PythonParser
         from project_graph_mapper.parser.go_parser import GoParser
+        from project_graph_mapper.parser.python_parser import PythonParser
+
         register(PythonParser())
         register(GoParser())
         exts = supported_extensions()
@@ -537,21 +589,25 @@ class TestRegistry:
 # Multi-language GraphBuilder
 # ══════════════════════════════════════════════════════════════════════════════
 
-class TestMultiLangBuilder:
 
+class TestMultiLangBuilder:
     @pytest.fixture
     def mixed_project(self, tmp_path: Path) -> Path:
         """Create a project with Python + Go + TypeScript files."""
         # Python
         (tmp_path / "utils").mkdir()
-        (tmp_path / "utils" / "auth.py").write_text(textwrap.dedent("""\
+        (tmp_path / "utils" / "auth.py").write_text(
+            textwrap.dedent("""\
             def validate_token(token: str) -> bool:
                 return token.startswith("Bearer ")
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
 
         # Go
         (tmp_path / "server").mkdir()
-        (tmp_path / "server" / "main.go").write_text(textwrap.dedent("""\
+        (tmp_path / "server" / "main.go").write_text(
+            textwrap.dedent("""\
             package main
 
             import "fmt"
@@ -567,11 +623,14 @@ class TestMultiLangBuilder:
             func (s *Server) Start() {
                 fmt.Printf("Starting on port %d\\n", s.Port)
             }
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
 
         # TypeScript
         (tmp_path / "frontend").mkdir()
-        (tmp_path / "frontend" / "app.ts").write_text(textwrap.dedent("""\
+        (tmp_path / "frontend" / "app.ts").write_text(
+            textwrap.dedent("""\
             import { Router } from 'express';
 
             interface AppConfig {
@@ -583,7 +642,9 @@ class TestMultiLangBuilder:
             }
 
             export { createApp };
-        """), encoding="utf-8")
+        """),
+            encoding="utf-8",
+        )
 
         return tmp_path
 
@@ -602,8 +663,8 @@ class TestMultiLangBuilder:
         builder = GraphBuilder().build(mixed_project)
         names = [sym.name for sym in builder.symbols.values()]
         assert "validate_token" in names  # Python
-        assert "NewServer" in names       # Go
-        assert "createApp" in names       # TypeScript
+        assert "NewServer" in names  # Go
+        assert "createApp" in names  # TypeScript
 
     def test_stats_include_all(self, mixed_project):
         builder = GraphBuilder().build(mixed_project)
@@ -613,27 +674,28 @@ class TestMultiLangBuilder:
 
 
 class TestJsTsImportResolution:
-
     def test_relative_import_resolution(self):
         from project_graph_mapper.output.html_writer import _resolve_js_ts_import
-        
+
         file_paths = {
             "src/utils/auth.ts",
             "src/services/user.ts",
             "src/components/button/index.tsx",
         }
-        
+
         # Test relative import to file
         res = _resolve_js_ts_import("src/services/user.ts", "../utils/auth", file_paths, Path("."))
         assert res == "src/utils/auth.ts"
-        
+
         # Test relative import to index file in folder
-        res = _resolve_js_ts_import("src/services/user.ts", "../components/button", file_paths, Path("."))
+        res = _resolve_js_ts_import(
+            "src/services/user.ts", "../components/button", file_paths, Path(".")
+        )
         assert res == "src/components/button/index.tsx"
 
     def test_alias_and_baseurl_resolution(self, tmp_path: Path):
         from project_graph_mapper.output.html_writer import _resolve_js_ts_import
-        
+
         # Write temporary tsconfig.json
         tsconfig = tmp_path / "tsconfig.json"
         tsconfig.write_text("""{
@@ -645,18 +707,134 @@ class TestJsTsImportResolution:
                 }
             }
         }""")
-        
+
         file_paths = {
             "src/components/button.tsx",
             "src/services/user.ts",
             "src/utils/auth.ts",
         }
-        
+
         # Test paths alias mapping
         res = _resolve_js_ts_import("src/app.ts", "@/components/button", file_paths, tmp_path)
         assert res == "src/components/button.tsx"
-        
-        # Test baseUrl fallback
+
         res = _resolve_js_ts_import("src/app.ts", "utils/auth", file_paths, tmp_path)
         assert res == "src/utils/auth.ts"
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# C# Parser
+# ══════════════════════════════════════════════════════════════════════════════
+
+
+class TestCSharpParser:
+    @pytest.fixture
+    def cs_file(self, tmp_path: Path) -> tuple[Path, Path]:
+        f = tmp_path / "Program.cs"
+        f.write_text(
+            textwrap.dedent("""\
+            using System;
+            using System.Collections.Generic;
+
+            namespace MyApp.Services {
+                public interface IUserService {
+                    User FindById(string id);
+                }
+
+                public enum Status {
+                    Active,
+                    Inactive
+                }
+
+                public record User(string Id, string Name);
+
+                public struct Point {
+                    public int X { get; set; }
+                    public int Y { get; set; }
+                }
+
+                public class UserService : IUserService {
+                    private Database db;
+
+                    public UserService(Database db) {
+                        this.db = db;
+                    }
+
+                    public User FindById(string id) {
+                        return db.Query(id);
+                    }
+
+                    public void DeleteUser(string id) {
+                        db.Delete(id);
+                        Console.WriteLine("Deleted");
+                        var config = new Config();
+                    }
+                }
+            }
+        """),
+            encoding="utf-8",
+        )
+        return f, tmp_path
+
+    def test_extracts_class(self, cs_file):
+        from project_graph_mapper.parser.csharp_parser import CSharpParser
+
+        fpath, root = cs_file
+        parser = CSharpParser()
+        _, symbols = parser.parse_file(fpath, root)
+
+        classes = [s for s in symbols if s.kind == SymbolKind.CLASS]
+        class_names = [s.name for s in classes]
+        assert "UserService" in class_names
+        # Record is treated as class
+        assert "User" in class_names
+
+    def test_extracts_interface_and_struct(self, cs_file):
+        from project_graph_mapper.parser.csharp_parser import CSharpParser
+
+        fpath, root = cs_file
+        parser = CSharpParser()
+        _, symbols = parser.parse_file(fpath, root)
+
+        interfaces = [s for s in symbols if s.kind == SymbolKind.INTERFACE]
+        assert any(s.name == "IUserService" for s in interfaces)
+
+        structs = [s for s in symbols if s.kind == SymbolKind.STRUCT]
+        assert any(s.name == "Point" for s in structs)
+
+    def test_extracts_enum(self, cs_file):
+        from project_graph_mapper.parser.csharp_parser import CSharpParser
+
+        fpath, root = cs_file
+        parser = CSharpParser()
+        _, symbols = parser.parse_file(fpath, root)
+
+        enums = [s for s in symbols if s.kind == SymbolKind.ENUM]
+        assert any(s.name == "Status" for s in enums)
+
+    def test_extracts_methods_and_properties(self, cs_file):
+        from project_graph_mapper.parser.csharp_parser import CSharpParser
+
+        fpath, root = cs_file
+        parser = CSharpParser()
+        _, symbols = parser.parse_file(fpath, root)
+
+        methods = [s for s in symbols if s.kind == SymbolKind.METHOD]
+        method_names = [m.name for m in methods]
+        assert "FindById" in method_names
+        assert "DeleteUser" in method_names
+        # Constructor
+        assert "UserService" in method_names
+        # Properties
+        assert "X" in method_names
+        assert "Y" in method_names
+
+    def test_extracts_imports(self, cs_file):
+        from project_graph_mapper.parser.csharp_parser import CSharpParser
+
+        fpath, root = cs_file
+        parser = CSharpParser()
+        file_node, _ = parser.parse_file(fpath, root)
+
+        assert "System" in file_node.imports
+        assert "System.Collections.Generic" in file_node.imports

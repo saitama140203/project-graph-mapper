@@ -16,10 +16,12 @@ dependencies = [
     "tree-sitter-go>=0.23.0",
     "tree-sitter-rust>=0.23.0",
     "tree-sitter-java>=0.23.0",
+    "tree-sitter-c-sharp>=0.23.0",
 ]
 
 [project.optional-dependencies]
 ai = ["anthropic>=0.25.0"]
+summary = ["openai>=1.30.0"]
 
 [project.scripts]
 pgm = "project_graph_mapper:main"

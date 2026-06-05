@@ -17,6 +17,9 @@ PGM quét source code, xây dựng graph quan hệ giữa các symbol (function,
   - [Phát hiện circular dependency (`cycles`)](#phát-hiện-circular-dependency-cycles)
   - [Xem ngôn ngữ hỗ trợ (`langs`)](#xem-ngôn-ngữ-hỗ-trợ-langs)
   - [Watch mode (`watch`)](#watch-mode-watch)
+  - [Hiển thị đồ thị tương tác (`viz`)](#-hiển-thị-đồ-thị-tương-tác-viz)
+  - [Tìm đường đi cuộc gọi (`path`)](#-tìm-đường-đi-cuộc-gọi-path)
+  - [Tìm code thừa (`deadcode`)](#-tìm-code-thừa-deadcode)
 - [AI Parser](#-ai-parser)
 - [Output](#-output)
 - [Cấu trúc dự án](#-cấu-trúc-dự-án)
@@ -74,6 +77,7 @@ pgm --version
 | Go          | `.go`                   | tree-sitter | struct, interface, method w/ receiver, trích xuất docstring |
 | Rust        | `.rs`                   | tree-sitter | impl block, trait, enum, trích xuất docstring |
 | Java        | `.java`                 | tree-sitter | class, interface, enum, constructor, trích xuất docstring |
+| C#          | `.cs`                   | tree-sitter | class, interface, struct, record, enum, method, property, trích xuất docstring |
 | Bất kỳ      | tuỳ chỉnh (`--ai-ext`)  | AI (opt-in) | Dùng Anthropic API                   |
 
 ---
@@ -88,12 +92,25 @@ Lệnh chính — quét toàn bộ project và sinh output.
 # Quét project hiện tại
 pgm scan .
 
+# Quét project và tự động trích xuất summary từ README.md/SUMMARY.md để đưa vào CONTEXT.md
+pgm scan . --summary
+
+# Quét project và dùng DeepSeek AI để tự động sinh tóm tắt hệ thống đưa vào CONTEXT.md (yêu cầu cấu hình DEEPSEEK_API_KEY)
+pgm scan . --summary-ai
+
 # Quét project tại đường dẫn cụ thể
 pgm scan ./my-project
 
 # Chỉ định thư mục output (mặc định: .pgm)
 pgm scan ./my-project -o ./output
 ```
+
+#### 📝 Tính năng Project Summary cho `CONTEXT.md`
+
+Khi cung cấp snapshots cho AI, PGM hỗ trợ tạo thêm phần **Project Summary** ở đầu file `CONTEXT.md` bằng 2 cách:
+1. **Lọc từ file tóm tắt có sẵn (`--summary`)**: PGM sẽ tự động tìm kiếm các tệp tóm tắt có sẵn trong dự án (như `README.md`, `SUMMARY.md`, `ARCHITECTURE.md`...) và trích xuất nội dung tổng quan (bỏ qua các hướng dẫn cài đặt/develop không cần thiết) để chèn vào `CONTEXT.md`.
+2. **Tự động tóm tắt bằng AI (`--summary-ai`)**: PGM sẽ sử dụng **DeepSeek API** (cần cấu hình biến môi trường `DEEPSEEK_API_KEY`) để tự động phân tích cấu trúc, thống kê và mối quan hệ của toàn bộ project, sau đó sinh ra một bản tóm tắt bằng tiếng Việt cực kỳ logic và chi tiết.
+   * *Fallback*: Nếu gọi API thất bại hoặc không có key, PGM sẽ tự động fallback tìm kiếm và trích xuất từ file tóm tắt có sẵn.
 
 **Ví dụ output:**
 
@@ -229,18 +246,28 @@ pgm langs
 **Output:**
 
 ```
-┌─────────────┬──────────────────────┬─────────────┐
-│ Language     │ Extensions           │ Engine      │
-├─────────────┼──────────────────────┼─────────────┤
-│ Python       │ .py                  │ ast         │
-│ Javascript   │ .js .mjs .cjs        │ tree-sitter │
-│ Typescript   │ .ts                  │ tree-sitter │
-│ Tsx          │ .tsx .jsx            │ tree-sitter │
-│ Go           │ .go                  │ tree-sitter │
-│ Rust         │ .rs                  │ tree-sitter │
-│ Java         │ .java               │ tree-sitter │
-│ Any          │ (dùng --ai-ext)      │ AI (opt-in) │
-└─────────────┴──────────────────────┴─────────────┘
+             Supported Languages              
+┌────────────┬─────────────────┬─────────────┐
+│ Language   │ Extensions      │ Engine      │
+├────────────┼─────────────────┼─────────────┤
+│ Python     │ .py             │ ast         │
+├────────────┼─────────────────┼─────────────┤
+│ Javascript │ .js .mjs .cjs   │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Typescript │ .ts             │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Tsx        │ .tsx .jsx       │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Go         │ .go             │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Rust       │ .rs             │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Java       │ .java           │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Csharp     │ .cs             │ tree-sitter │
+├────────────┼─────────────────┼─────────────┤
+│ Any        │ (dùng --ai-ext) │ AI (opt-in) │
+└────────────┴─────────────────┴─────────────┘
 ```
 
 ---
@@ -278,6 +305,12 @@ Lệnh `viz` quét project, tạo các file đồ thị tương tác (HTML, JSON
 ```bash
 # Khởi chạy server, watch project và mở trình duyệt tự động
 pgm viz ./my-project
+
+# Khởi chạy server, watch project và sinh Project Summary từ file có sẵn
+pgm viz ./my-project --summary
+
+# Khởi chạy server, watch project và sinh AI Summary bằng DeepSeek
+pgm viz ./my-project --summary-ai
 
 # Chỉ tạo file graph.html, không khởi chạy server hay mở trình duyệt
 pgm viz ./my-project --no-open
@@ -418,6 +451,11 @@ File markdown tổng quan project — **paste trực tiếp vào AI** (ChatGPT, 
 
 > Generated: 2026-06-03 15:00  |  Files: 42  |  Symbols: 318
 
+## Project Summary
+[Nội dung tóm tắt dự án của bạn (được trích xuất từ file hoặc do DeepSeek AI tạo ra)]
+
+---
+
 ## Language breakdown
 | Language   | Files | Symbols | Engine      |
 |------------|-------|---------|-------------|
@@ -483,6 +521,7 @@ src/project_graph_mapper/
 │   ├── go_parser.py            # GoParser
 │   ├── rust_parser.py          # RustParser
 │   ├── java_parser.py          # JavaParser
+│   ├── csharp_parser.py        # CSharpParser (C#)
 │   └── ai_parser.py            # AiParser (Anthropic API)
 ├── graph/
 │   ├── models.py               # SymbolKind, Symbol, FileNode, CallSite

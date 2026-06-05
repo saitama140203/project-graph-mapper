@@ -6,8 +6,8 @@ from pathlib import Path
 
 import tree_sitter
 
-from .base import BaseParser
 from ..graph.models import CallSite, FileNode, Location, Symbol, SymbolKind
+from .base import BaseParser
 
 
 class TreeSitterParser(BaseParser):
@@ -185,17 +185,17 @@ class TreeSitterParser(BaseParser):
         for i in range(idx - 1, -1, -1):
             sibling = siblings[i]
             sib_type = sibling.type.lower()
-            
+
             # Kiểm tra nếu là node comment
             is_comment = "comment" in sib_type or sib_type == "javadoc"
             if not is_comment:
                 break
-                
+
             # Đảm bảo khoảng cách dòng hợp lý (liền kề nhau, tối đa 1 dòng trống)
             distance = current_node_start_row - sibling.end_point.row
             if distance > 1:
                 break
-                
+
             # Trích xuất text
             text = sibling.text.decode("utf-8", errors="ignore").strip()
             # Dọn dẹp ký tự comment thông dụng
@@ -211,11 +211,11 @@ class TreeSitterParser(BaseParser):
                 if line.startswith("*"):
                     line = line[1:]
                 lines.append(line.strip())
-            
+
             cleaned_text = "\n".join(lines).strip()
             if cleaned_text:
                 collected_comments.insert(0, cleaned_text)
-                
+
             # Cập nhật start row để kiểm tra sibling tiếp theo
             current_node_start_row = sibling.start_point.row
 
@@ -248,4 +248,3 @@ class TreeSitterParser(BaseParser):
         )
 
     _make_symbol = _make_sym
-

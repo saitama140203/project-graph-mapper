@@ -3,8 +3,8 @@ from __future__ import annotations
 import tree_sitter
 import tree_sitter_rust
 
-from .tree_sitter_base import TreeSitterParser
 from ..graph.models import Location, Symbol, SymbolKind
+from .tree_sitter_base import TreeSitterParser
 
 
 class RustParser(TreeSitterParser):
@@ -38,34 +38,54 @@ class RustParser(TreeSitterParser):
                 case "function_item":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.FUNCTION,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.FUNCTION,
+                            )
+                        )
 
                 case "struct_item":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.STRUCT,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.STRUCT,
+                            )
+                        )
 
                 case "enum_item":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.ENUM,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.ENUM,
+                            )
+                        )
 
                 case "trait_item":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.TRAIT,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.TRAIT,
+                            )
+                        )
 
                 case "impl_item":
                     self._extract_impl(child, source, rel_path, symbols)
@@ -73,10 +93,15 @@ class RustParser(TreeSitterParser):
                 case "const_item":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.CONSTANT,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.CONSTANT,
+                            )
+                        )
 
                 case _:
                     pass
@@ -119,11 +144,16 @@ class RustParser(TreeSitterParser):
             if child.type == "function_item":
                 name_node = child.child_by_field_name("name")
                 if name_node:
-                    symbols.append(self._make_sym(
-                        child, name_node, source, rel_path,
-                        kind=SymbolKind.METHOD,
-                        class_name=impl_type_name,
-                    ))
+                    symbols.append(
+                        self._make_sym(
+                            child,
+                            name_node,
+                            source,
+                            rel_path,
+                            kind=SymbolKind.METHOD,
+                            class_name=impl_type_name,
+                        )
+                    )
 
     def _get_impl_type_name(self, impl_node: tree_sitter.Node) -> str | None:
         """Extract type name từ impl node.

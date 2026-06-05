@@ -4,9 +4,8 @@ from .models import Symbol
 
 
 class QueryEngine:
-
     def __init__(self, graph: nx.DiGraph, symbols: dict[str, Symbol]):
-        self.graph   = graph
+        self.graph = graph
         self.symbols = symbols
 
     # ── Impact ───────────────────────────────────────────────────────────────
@@ -30,13 +29,17 @@ class QueryEngine:
             return {
                 "ambiguous": True,
                 "matches": [
-                    {"id": sid, "file": self.symbols[sid].loc.file, "line": self.symbols[sid].loc.line}
+                    {
+                        "id": sid,
+                        "file": self.symbols[sid].loc.file,
+                        "line": self.symbols[sid].loc.line,
+                    }
                     for sid in matches
                 ],
             }
 
         sym_id = matches[0]
-        sym    = self.symbols[sym_id]
+        sym = self.symbols[sym_id]
 
         # BFS ngược: tìm tất cả nodes có đường đi đến sym_id
         try:
@@ -46,20 +49,19 @@ class QueryEngine:
 
         direct_files = list({cs.file for cs in sym.used_by})
 
-        transitive_files = list({
-            self.symbols[t].loc.file
-            for t in transitive_nodes
-            if t in self.symbols
-        } - set(direct_files))
+        transitive_files = list(
+            {self.symbols[t].loc.file for t in transitive_nodes if t in self.symbols}
+            - set(direct_files)
+        )
 
         return {
-            "symbol":           sym,
-            "symbol_id":        sym_id,
-            "direct_callers":   sym.used_by,
-            "direct_files":     direct_files,
+            "symbol": sym,
+            "symbol_id": sym_id,
+            "direct_callers": sym.used_by,
+            "direct_files": direct_files,
             "transitive_files": transitive_files,
-            "impact_score":     len(direct_files) + len(transitive_files),
-            "checklist":        self._build_checklist(sym, direct_files, transitive_files),
+            "impact_score": len(direct_files) + len(transitive_files),
+            "checklist": self._build_checklist(sym, direct_files, transitive_files),
         }
 
     def impact_by_id(self, symbol_id: str) -> dict:
@@ -107,10 +109,10 @@ class QueryEngine:
         """Tìm tất cả các đường đi (call paths) từ start_symbol đến end_symbol."""
         start_matches = [sid for sid, sym in self.symbols.items() if sym.name == start_symbol]
         end_matches = [sid for sid, sym in self.symbols.items() if sym.name == end_symbol]
-        
+
         if not start_matches or not end_matches:
             return []
-            
+
         all_paths = []
         for start_id in start_matches:
             for end_id in end_matches:
@@ -120,7 +122,6 @@ class QueryEngine:
                 except Exception:
                     pass
         return all_paths
-
 
     # ── Helper ───────────────────────────────────────────────────────────────
 

@@ -4,17 +4,26 @@ from pathlib import Path
 
 import networkx as nx
 
-from .models import FileNode, Symbol
 from ..parser.base import (
-    BaseParser,
     clear_registry,
     get_parser,
     register,
     supported_extensions,
 )
+from .models import FileNode, Symbol
 
 # Thư mục bỏ qua khi quét... Muốn bỏ gì thì thêm vào đây
-SKIP_DIRS = {".venv", "venv", "__pycache__", ".git", ".pgm", "node_modules", ".tox", "dist", "build"}
+SKIP_DIRS = {
+    ".venv",
+    "venv",
+    "__pycache__",
+    ".git",
+    ".pgm",
+    "node_modules",
+    ".tox",
+    "dist",
+    "build",
+}
 
 
 def _init_registry(
@@ -28,21 +37,29 @@ def _init_registry(
     clear_registry()
 
     # ── Tree-sitter parsers ──────────────────────────────────────────────────
-    from ..parser.python_parser import PythonParser
-    from ..parser.js_parser import JavaScriptParser, TypeScriptParser, TSXParser
+    from ..parser.csharp_parser import CSharpParser
     from ..parser.go_parser import GoParser
-    from ..parser.rust_parser import RustParser
     from ..parser.java_parser import JavaParser
+    from ..parser.js_parser import JavaScriptParser, TSXParser, TypeScriptParser
+    from ..parser.python_parser import PythonParser
+    from ..parser.rust_parser import RustParser
 
     for parser_cls in [
-        PythonParser, JavaScriptParser, TypeScriptParser,
-        TSXParser, GoParser, RustParser, JavaParser,
+        PythonParser,
+        JavaScriptParser,
+        TypeScriptParser,
+        TSXParser,
+        GoParser,
+        RustParser,
+        JavaParser,
+        CSharpParser,
     ]:
         register(parser_cls())
 
     # ── AI parser (opt-in) ───────────────────────────────────────────────────
     if ai_extensions:
         from ..parser.ai_parser import AiParser
+
         ai_parser = AiParser(
             ai_extensions=ai_extensions,
             api_key=ai_api_key,
@@ -53,7 +70,6 @@ def _init_registry(
 
 
 class GraphBuilder:
-
     def __init__(
         self,
         *,
@@ -61,10 +77,10 @@ class GraphBuilder:
         ai_api_key: str | None = None,
         ai_model: str = "claude-sonnet-4-20250514",
     ) -> None:
-        self.graph:   nx.DiGraph           = nx.DiGraph()
-        self.symbols: dict[str, Symbol]    = {}
-        self.files:   dict[str, FileNode]  = {}
-        self._root:   Path | None          = None
+        self.graph: nx.DiGraph = nx.DiGraph()
+        self.symbols: dict[str, Symbol] = {}
+        self.files: dict[str, FileNode] = {}
+        self._root: Path | None = None
         self._ai_extensions = ai_extensions
         self._ai_api_key = ai_api_key
         self._ai_model = ai_model
@@ -144,16 +160,16 @@ class GraphBuilder:
         if parser is None:
             return  # extension không hỗ trợ
 
-        rel        = str(filepath.relative_to(self._root)).replace("\\", "/")
-        new_hash   = hashlib.md5(filepath.read_bytes()).hexdigest()
-        old_node   = self.files.get(rel)
+        rel = str(filepath.relative_to(self._root)).replace("\\", "/")
+        new_hash = hashlib.md5(filepath.read_bytes()).hexdigest()
+        old_node = self.files.get(rel)
 
         # Không thay đổi → bỏ qua
         if old_node and old_node.last_hash == new_hash:
             return
 
         # Xóa symbols cũ của file này
-        for sid in (old_node.symbols if old_node else []):
+        for sid in old_node.symbols if old_node else []:
             if self.graph.has_node(sid):
                 self.graph.remove_node(sid)
             self.symbols.pop(sid, None)
@@ -202,7 +218,7 @@ class GraphBuilder:
     @property
     def stats(self) -> dict:
         return {
-            "total_files":   len(self.files),
+            "total_files": len(self.files),
             "total_symbols": len(self.symbols),
-            "total_edges":   self.graph.number_of_edges(),
+            "total_edges": self.graph.number_of_edges(),
         }

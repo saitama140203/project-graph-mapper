@@ -3,8 +3,8 @@ from __future__ import annotations
 import tree_sitter
 import tree_sitter_go
 
+from ..graph.models import Symbol, SymbolKind
 from .tree_sitter_base import TreeSitterParser
-from ..graph.models import Location, Symbol, SymbolKind
 
 
 class GoParser(TreeSitterParser):
@@ -29,21 +29,31 @@ class GoParser(TreeSitterParser):
                 case "function_declaration":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.FUNCTION,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.FUNCTION,
+                            )
+                        )
 
                 case "method_declaration":
                     name_node = child.child_by_field_name("name")
                     receiver = child.child_by_field_name("receiver")
                     if name_node:
                         recv_name = self._extract_receiver_type(receiver) if receiver else None
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.METHOD,
-                            class_name=recv_name,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.METHOD,
+                                class_name=recv_name,
+                            )
+                        )
 
                 case "type_declaration":
                     # type_declaration chứa type_spec children
@@ -56,10 +66,15 @@ class GoParser(TreeSitterParser):
                         if spec.type == "const_spec":
                             name_node = spec.child_by_field_name("name")
                             if name_node:
-                                symbols.append(self._make_sym(
-                                    spec, name_node, source, rel_path,
-                                    kind=SymbolKind.CONSTANT,
-                                ))
+                                symbols.append(
+                                    self._make_sym(
+                                        spec,
+                                        name_node,
+                                        source,
+                                        rel_path,
+                                        kind=SymbolKind.CONSTANT,
+                                    )
+                                )
 
                 case _:
                     pass
@@ -87,10 +102,15 @@ class GoParser(TreeSitterParser):
             case _:
                 kind = SymbolKind.CLASS  # type alias, fallback
 
-        symbols.append(self._make_sym(
-            spec, name_node, source, rel_path,
-            kind=kind,
-        ))
+        symbols.append(
+            self._make_sym(
+                spec,
+                name_node,
+                source,
+                rel_path,
+                kind=kind,
+            )
+        )
 
     def _extract_receiver_type(self, receiver: tree_sitter.Node) -> str | None:
         """Extract receiver type từ `(s *Server)` → 'Server'."""

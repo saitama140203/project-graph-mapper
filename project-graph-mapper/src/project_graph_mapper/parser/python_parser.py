@@ -4,12 +4,11 @@ import ast
 import hashlib
 from pathlib import Path
 
+from ..graph.models import CallSite, FileNode, Location, Symbol, SymbolKind
 from .base import BaseParser
-from ..graph.models import CallSite, FileNode, Symbol, SymbolKind, Location
 
 
 class PythonParser(BaseParser):
-
     def extensions(self) -> list[str]:
         return [".py"]
 
@@ -17,7 +16,7 @@ class PythonParser(BaseParser):
         return "ast"
 
     def parse_file(self, filepath: Path, root: Path) -> tuple[FileNode, list[Symbol]]:
-        rel    = str(filepath.relative_to(root)).replace("\\", "/")
+        rel = str(filepath.relative_to(root)).replace("\\", "/")
         source = filepath.read_text(encoding="utf-8", errors="ignore")
 
         try:
@@ -81,9 +80,9 @@ class PythonParser(BaseParser):
     ) -> Symbol:
         prefix = f"{class_name}." if class_name else ""
         sym_id = f"{rel_path}::{prefix}{node.name}"
-        lines  = source.splitlines()
-        sig    = lines[node.lineno - 1].strip() if node.lineno <= len(lines) else ""
-        doc    = (ast.get_docstring(node) or "")[:200]
+        lines = source.splitlines()
+        sig = lines[node.lineno - 1].strip() if node.lineno <= len(lines) else ""
+        doc = (ast.get_docstring(node) or "")[:200]
 
         return Symbol(
             id=sym_id,
@@ -96,8 +95,8 @@ class PythonParser(BaseParser):
 
     def _extract_class(self, node: ast.ClassDef, rel_path: str, source: str) -> Symbol:
         lines = source.splitlines()
-        sig   = lines[node.lineno - 1].strip() if node.lineno <= len(lines) else ""
-        doc   = (ast.get_docstring(node) or "")[:200]
+        sig = lines[node.lineno - 1].strip() if node.lineno <= len(lines) else ""
+        doc = (ast.get_docstring(node) or "")[:200]
 
         return Symbol(
             id=f"{rel_path}::{node.name}",
@@ -120,7 +119,7 @@ class PythonParser(BaseParser):
         Scan lại file, tìm Call nodes, điền vào used_by của symbol được gọi.
         Gọi method này sau khi build() đã parse tất cả file.
         """
-        rel    = str(filepath.relative_to(root)).replace("\\", "/")
+        rel = str(filepath.relative_to(root)).replace("\\", "/")
         source = filepath.read_text(encoding="utf-8", errors="ignore")
 
         try:

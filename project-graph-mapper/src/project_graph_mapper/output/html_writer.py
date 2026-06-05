@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
 
@@ -9,7 +8,6 @@ from ..graph.models import FileNode, Symbol
 
 
 class HtmlWriter:
-
     def write(
         self,
         files: dict[str, FileNode],
@@ -19,10 +17,10 @@ class HtmlWriter:
         # 1. Build Symbol Graph nodes and links
         symbol_nodes = []
         symbol_links = []
-        
+
         # Keep track of existing symbols so we don't link to non-existent ones
         symbol_ids = set(symbols.keys())
-        
+
         # Pre-calculate file languages for symbols
         symbol_languages = {}
         for file_path, file_node in files.items():
@@ -31,6 +29,7 @@ class HtmlWriter:
 
         # Build networkx graph to calculate cycles & hotspots
         import networkx as nx
+
         from ..graph.query import QueryEngine
 
         graph = nx.DiGraph()
@@ -43,19 +42,21 @@ class HtmlWriter:
 
         query_engine = QueryEngine(graph, symbols)
         cycles_list = query_engine.cycles()
-        
+
         # Transform hotspots to readable format
         hotspots_list = []
         for sym_id, score in query_engine.hotspots(15):
             sym = symbols.get(sym_id)
             if sym:
-                hotspots_list.append({
-                    "id": sym_id,
-                    "name": sym.name,
-                    "kind": sym.kind.value,
-                    "filepath": sym.loc.file,
-                    "score": score
-                })
+                hotspots_list.append(
+                    {
+                        "id": sym_id,
+                        "name": sym.name,
+                        "kind": sym.kind.value,
+                        "filepath": sym.loc.file,
+                        "score": score,
+                    }
+                )
 
         project_root = output_path.parent.parent.resolve()
 
@@ -67,27 +68,25 @@ class HtmlWriter:
                 score = len(sym.used_by)
             snippet = _get_code_snippet(project_root, sym.loc.file, sym.loc.line)
 
-            symbol_nodes.append({
-                "id": sym.id,
-                "name": sym.name,
-                "kind": sym.kind,
-                "filepath": sym.loc.file,
-                "line": sym.loc.line,
-                "signature": sym.signature,
-                "docstring": sym.docstring,
-                "language": lang,
-                "impact_score": score,
-                "code_snippet": snippet,
-            })
-            
+            symbol_nodes.append(
+                {
+                    "id": sym.id,
+                    "name": sym.name,
+                    "kind": sym.kind,
+                    "filepath": sym.loc.file,
+                    "line": sym.loc.line,
+                    "signature": sym.signature,
+                    "docstring": sym.docstring,
+                    "language": lang,
+                    "impact_score": score,
+                    "code_snippet": snippet,
+                }
+            )
+
             # Add call links
             for target_id in sym.uses:
                 if target_id in symbol_ids:
-                    symbol_links.append({
-                        "source": sym.id,
-                        "target": target_id,
-                        "type": "call"
-                    })
+                    symbol_links.append({"source": sym.id, "target": target_id, "type": "call"})
 
         # 2. Build File Graph nodes and links
         file_nodes = []
@@ -99,13 +98,15 @@ class HtmlWriter:
         project_root = output_path.parent.parent.resolve()
 
         for f_path, file in files.items():
-            file_nodes.append({
-                "id": file.path,
-                "name": Path(file.path).name,
-                "language": file.language,
-                "total_symbols": len(file.symbols),
-            })
-            
+            file_nodes.append(
+                {
+                    "id": file.path,
+                    "name": Path(file.path).name,
+                    "language": file.language,
+                    "total_symbols": len(file.symbols),
+                }
+            )
+
             # Map symbol calls to file level connections
             for sym_id in file.symbols:
                 sym = symbols.get(sym_id)
@@ -119,11 +120,13 @@ class HtmlWriter:
                             conn = (f_path, other_file)
                             if conn not in file_connections:
                                 file_connections.add(conn)
-                                file_links.append({
-                                    "source": f_path,
-                                    "target": other_file,
-                                    "type": "call-dependency"
-                                })
+                                file_links.append(
+                                    {
+                                        "source": f_path,
+                                        "target": other_file,
+                                        "type": "call-dependency",
+                                    }
+                                )
 
             # Also try to map imports directly if they match a file path
             # (Best effort module path resolution)
@@ -135,17 +138,15 @@ class HtmlWriter:
                         conn = (f_path, resolved)
                         if conn not in file_connections:
                             file_connections.add(conn)
-                            file_links.append({
-                                "source": f_path,
-                                "target": resolved,
-                                "type": "import-dependency"
-                            })
+                            file_links.append(
+                                {"source": f_path, "target": resolved, "type": "import-dependency"}
+                            )
                         continue
 
                 # ── General fallback resolution (python, go, rust, java, etc.) ──
                 imp_parts = imp.split(".")
                 potential_suffixes = [".py", ".js", ".ts", ".go", ".rs", ".java"]
-                
+
                 # Check absolute matches in project structure
                 for suffix in potential_suffixes:
                     # e.g., utils/auth.py
@@ -154,11 +155,13 @@ class HtmlWriter:
                         conn = (f_path, check_path)
                         if conn not in file_connections:
                             file_connections.add(conn)
-                            file_links.append({
-                                "source": f_path,
-                                "target": check_path,
-                                "type": "import-dependency"
-                            })
+                            file_links.append(
+                                {
+                                    "source": f_path,
+                                    "target": check_path,
+                                    "type": "import-dependency",
+                                }
+                            )
                             break
 
         # Assemble the data payload
@@ -188,7 +191,7 @@ class HtmlWriter:
 
         # Generate HTML content
         html_content = self._generate_html(data_payload)
-        
+
         # Ensure output directory exists and write
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(html_content, encoding="utf-8")
@@ -199,7 +202,7 @@ class HtmlWriter:
 
         data_json = json.dumps(data, indent=2, ensure_ascii=False)
         # Escape </script> inside JSON to prevent browser HTML parser from terminating the script tag early
-        data_json = re.sub(r'(?i)</script>', r'<\/script>', data_json)
+        data_json = re.sub(r"(?i)</script>", r"<\/script>", data_json)
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1695,12 +1698,13 @@ def _resolve_js_ts_import(
         if config_path.exists():
             try:
                 import re
+
                 content = config_path.read_text(encoding="utf-8", errors="ignore")
-                content = re.sub(r'//.*', '', content)
-                content = re.sub(r'/\*.*?\*/', '', content, flags=re.DOTALL)
-                content = re.sub(r',\s*([\]}])', r'\1', content)
+                content = re.sub(r"//.*", "", content)
+                content = re.sub(r"/\*.*?\*/", "", content, flags=re.DOTALL)
+                content = re.sub(r",\s*([\]}])", r"\1", content)
                 config = json.loads(content)
-                
+
                 compiler_options = config.get("compilerOptions", {})
                 paths = compiler_options.get("paths", {})
                 base_url = compiler_options.get("baseUrl", "").strip("./").strip("/")
@@ -1710,7 +1714,7 @@ def _resolve_js_ts_import(
                     if "*" in pattern:
                         prefix = pattern.replace("*", "")
                         if imp.startswith(prefix):
-                            suffix = imp[len(prefix):]
+                            suffix = imp[len(prefix) :]
                             for target in targets:
                                 target_prefix = target.replace("*", "")
                                 target_path = target_prefix + suffix
@@ -1757,7 +1761,9 @@ def _check_absolute_import_path(target_path_str: str, file_paths: set[str]) -> s
     return None
 
 
-def _get_code_snippet(project_root: Path, file_path: str, start_line: int, max_lines: int = 15) -> str:
+def _get_code_snippet(
+    project_root: Path, file_path: str, start_line: int, max_lines: int = 15
+) -> str:
     try:
         full_path = project_root / file_path
         if not full_path.exists():

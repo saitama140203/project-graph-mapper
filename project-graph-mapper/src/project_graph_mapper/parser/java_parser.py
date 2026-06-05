@@ -3,8 +3,8 @@ from __future__ import annotations
 import tree_sitter
 import tree_sitter_java
 
+from ..graph.models import Symbol, SymbolKind
 from .tree_sitter_base import TreeSitterParser
-from ..graph.models import Location, Symbol, SymbolKind
 
 
 class JavaParser(TreeSitterParser):
@@ -41,14 +41,22 @@ class JavaParser(TreeSitterParser):
                     name_node = child.child_by_field_name("name")
                     if name_node:
                         cls_name = self._node_text(name_node)
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.CLASS,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.CLASS,
+                            )
+                        )
                         body = child.child_by_field_name("body")
                         if body:
                             self._walk_declarations(
-                                body, source, rel_path, symbols,
+                                body,
+                                source,
+                                rel_path,
+                                symbols,
                                 class_name=cls_name,
                             )
 
@@ -56,47 +64,73 @@ class JavaParser(TreeSitterParser):
                     name_node = child.child_by_field_name("name")
                     if name_node:
                         iface_name = self._node_text(name_node)
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.INTERFACE,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.INTERFACE,
+                            )
+                        )
                         body = child.child_by_field_name("body")
                         if body:
                             self._walk_declarations(
-                                body, source, rel_path, symbols,
+                                body,
+                                source,
+                                rel_path,
+                                symbols,
                                 class_name=iface_name,
                             )
 
                 case "enum_declaration":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.ENUM,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.ENUM,
+                            )
+                        )
 
                 case "method_declaration":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.METHOD,
-                            class_name=class_name,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.METHOD,
+                                class_name=class_name,
+                            )
+                        )
 
                 case "constructor_declaration":
                     name_node = child.child_by_field_name("name")
                     if name_node:
-                        symbols.append(self._make_sym(
-                            child, name_node, source, rel_path,
-                            kind=SymbolKind.METHOD,
-                            class_name=class_name,
-                        ))
+                        symbols.append(
+                            self._make_sym(
+                                child,
+                                name_node,
+                                source,
+                                rel_path,
+                                kind=SymbolKind.METHOD,
+                                class_name=class_name,
+                            )
+                        )
 
                 case "program":
                     # Top-level wrapper
                     self._walk_declarations(
-                        child, source, rel_path, symbols,
+                        child,
+                        source,
+                        rel_path,
+                        symbols,
                         class_name=class_name,
                     )
 
@@ -114,7 +148,9 @@ class JavaParser(TreeSitterParser):
                 # import com.example.Service; → "com.example.Service"
                 # Lấy phần giữa "import " và ";"
                 text = self._node_text(child)
-                text = text.removeprefix("import ").removeprefix("static ").removesuffix(";").strip()
+                text = (
+                    text.removeprefix("import ").removeprefix("static ").removesuffix(";").strip()
+                )
                 if text:
                     imports.append(text)
         return imports

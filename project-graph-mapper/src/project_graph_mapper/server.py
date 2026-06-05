@@ -9,15 +9,18 @@ from pathlib import Path
 try:
     from http.server import ThreadingHTTPServer
 except ImportError:
-    from socketserver import ThreadingMixIn
     from http.server import HTTPServer
+    from socketserver import ThreadingMixIn
+
     class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
         daemon_threads = True
+
 
 _clients: set[queue.Queue] = set()
 _clients_lock = threading.Lock()
 _server_thread: threading.Thread | None = None
 _server: ThreadingHTTPServer | None = None
+
 
 class LiveReloadRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, directory=None, **kwargs):
@@ -34,7 +37,7 @@ class LiveReloadRequestHandler(SimpleHTTPRequestHandler):
             self.send_header("Connection", "keep-alive")
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
-            
+
             q: queue.Queue = queue.Queue()
             with _clients_lock:
                 _clients.add(q)
@@ -66,7 +69,7 @@ class LiveReloadRequestHandler(SimpleHTTPRequestHandler):
 
 def start_server(out_dir: Path, port: int = 0) -> int:
     global _server, _server_thread
-    
+
     # We want to serve out_dir
     def handler_factory(*args, **kwargs):
         return LiveReloadRequestHandler(*args, directory=str(out_dir), **kwargs)
@@ -76,7 +79,7 @@ def start_server(out_dir: Path, port: int = 0) -> int:
 
     _server_thread = threading.Thread(target=_server.serve_forever, daemon=True)
     _server_thread.start()
-    
+
     return actual_port
 
 

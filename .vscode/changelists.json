@@ -1,0 +1,42 @@
+{
+  "changelists": [
+    {
+      "name": "Default",
+      "files": [
+        "project-graph-mapper/.gitignore",
+        "project-graph-mapper/src/project_graph_mapper/output/md_writer.py",
+        ".vscode/changelists.json",
+        ".pgm/CONTEXT.md",
+        ".pgm/graph.html",
+        ".pgm/graph.json",
+        ".pgm/graph.mermaid",
+        "project-graph-mapper/pyproject.toml",
+        "project-graph-mapper/src/project_graph_mapper/cli.py",
+        "project-graph-mapper/src/project_graph_mapper/graph/builder.py",
+        "project-graph-mapper/src/project_graph_mapper/graph/models.py",
+        "project-graph-mapper/src/project_graph_mapper/graph/query.py",
+        "project-graph-mapper/src/project_graph_mapper/output/html_writer.py",
+        "project-graph-mapper/src/project_graph_mapper/output/json_writer.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/ai_parser.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/base.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/go_parser.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/java_parser.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/js_parser.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/python_parser.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/rust_parser.py",
+        "project-graph-mapper/src/project_graph_mapper/parser/tree_sitter_base.py",
+        "project-graph-mapper/src/project_graph_mapper/server.py",
+        "project-graph-mapper/src/project_graph_mapper/watcher.py",
+        "project-graph-mapper/tests/test_core.py",
+        "project-graph-mapper/tests/test_parsers.py",
+        "project-graph-mapper/tests/test_viz.py",
+        "project-graph-mapper/uv.lock",
+        "project-graph-mapper/src/project_graph_mapper/parser/csharp_parser.py",
+        "project-graph-mapper/README.md",
+        "project-graph-mapper/src/project_graph_mapper/output/summarizer.py",
+        "project-graph-mapper/tests/test_summarizer.py"
+      ]
+    }
+  ],
+  "active": "Default"
+}
